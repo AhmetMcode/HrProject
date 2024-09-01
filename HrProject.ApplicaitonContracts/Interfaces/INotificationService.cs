@@ -12,7 +12,6 @@ namespace HrProject.ApplicaitonContracts.Interfaces
         public List<NotificationDetail> GetMyNotif(string userId);
         public void ReadNotificationCount(string userId);
         public void SendSms(List<string> phones, string message);
-        public void SendTerminNotification(string userId, string message);
         public Task SendMobileNotifAsync(string baslik, string icerik, string deviceToken);
     }
 }

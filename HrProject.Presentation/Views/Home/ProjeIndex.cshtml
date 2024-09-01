@@ -1,7 +1,7 @@
 ﻿@using HrProject.Domain.Entities;
 @{
     ViewData["Title"] = "Home Page";
-    var lasts = ViewBag.LastActivities as List<LastActivity>;
+
 }
 <script src="~/calendarscript/plugins/jquery/jquery.min.js"></script>
 <script src="~/calendarscript/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -182,43 +182,7 @@
                     <h5 class="card-title">Son Aktiviteler  </h5>
                 </div>
 
-                <div class="activity">
-
-                    @foreach (var item in lasts.OrderByDescending(x => x.CreatedTime))
-                    {
-                        TimeSpan timeDifference = DateTime.Now - item.CreatedTime.Value;
-                        var timeElapsedMinutes = (int)timeDifference.TotalMinutes;
-                        var timeElapsedHours = (int)timeDifference.TotalHours;
-                        var timeElapsedDays = (int)timeDifference.TotalDays;
-
-                        string timeElapsedString;
-                        if (timeElapsedDays > 0)
-                        {
-                            timeElapsedString = $"{timeElapsedDays} {(timeElapsedDays == 1 ? "day" : "days")}";
-                        }
-                        else if (timeElapsedHours > 0)
-                        {
-                            timeElapsedString = $"{timeElapsedHours} {(timeElapsedHours == 1 ? "hour" : "hours")}";
-                        }
-                        else
-                        {
-                            timeElapsedString = $"{timeElapsedMinutes} {(timeElapsedMinutes == 1 ? "minute" : "minutes")}";
-                        }
-
-                        <div class="activity-item d-flex">
-                            <div class="activite-label">@timeElapsedString</div>
-                            <i class='bi bi-circle-fill activity-badge text-@item.Renk align-self-start'></i>
-                            <div class="activity-content">
-                                <a href="@item.Url" class="fw-bold text-dark">@item.Icerik</a>
-                            </div>
-                        </div>
-                    }
-
-
-
-
-
-                </div>
+         
 
             </div>
         </div><!-- End Recent Activity -->

@@ -1,27 +1,32 @@
 {
   "format": 1,
   "restore": {
-    "/Users/mcodesoft/Desktop/HrProject/HrProject.Domain/HrProject.Domain.csproj": {}
+    "C:\\Users\\Ahmet\\source\\repos\\HrProject\\HrProject.Domain\\HrProject.Domain.csproj": {}
   },
   "projects": {
-    "/Users/mcodesoft/Desktop/HrProject/HrProject.Domain/HrProject.Domain.csproj": {
+    "C:\\Users\\Ahmet\\source\\repos\\HrProject\\HrProject.Domain\\HrProject.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/mcodesoft/Desktop/HrProject/HrProject.Domain/HrProject.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\Ahmet\\source\\repos\\HrProject\\HrProject.Domain\\HrProject.Domain.csproj",
         "projectName": "HrProject.Domain",
-        "projectPath": "/Users/mcodesoft/Desktop/HrProject/HrProject.Domain/HrProject.Domain.csproj",
-        "packagesPath": "/Users/mcodesoft/.nuget/packages/",
-        "outputPath": "/Users/mcodesoft/Desktop/HrProject/HrProject.Domain/obj/",
+        "projectPath": "C:\\Users\\Ahmet\\source\\repos\\HrProject\\HrProject.Domain\\HrProject.Domain.csproj",
+        "packagesPath": "C:\\Users\\Ahmet\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Ahmet\\source\\repos\\HrProject\\HrProject.Domain\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/mcodesoft/Desktop/HrProject/NuGet.Config",
-          "/Users/mcodesoft/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\Ahmet\\source\\repos\\HrProject\\NuGet.Config",
+          "C:\\Users\\Ahmet\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
         ],
         "sources": {
-          "/usr/local/share/dotnet/library-packs": {},
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -93,7 +98,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.410/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
         }
       }
     }

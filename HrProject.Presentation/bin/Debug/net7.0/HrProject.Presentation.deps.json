@@ -407,7 +407,7 @@
           },
           "lib/net7.0/Aspose.Words.dll": {
             "assemblyVersion": "24.5.0.0",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "24.5.0.0"
           }
         },
         "compile": {
@@ -499,7 +499,25 @@
         }
       },
       "bblanchon.PDFium.macOS/124.0.6350": {},
-      "bblanchon.PDFium.Win32/124.0.6350": {},
+      "bblanchon.PDFium.Win32/124.0.6350": {
+        "runtimeTargets": {
+          "runtimes/win-arm64/native/pdfium.dll": {
+            "rid": "win-arm64",
+            "assetType": "native",
+            "fileVersion": "124.0.6350.0"
+          },
+          "runtimes/win-x64/native/pdfium.dll": {
+            "rid": "win-x64",
+            "assetType": "native",
+            "fileVersion": "124.0.6350.0"
+          },
+          "runtimes/win-x86/native/pdfium.dll": {
+            "rid": "win-x86",
+            "assetType": "native",
+            "fileVersion": "124.0.6350.0"
+          }
+        }
+      },
       "BouncyCastle.Cryptography/2.2.1": {
         "runtime": {
           "lib/net6.0/BouncyCastle.Cryptography.dll": {
@@ -574,11 +592,11 @@
         "runtime": {
           "lib/net5.0/Xceed.Document.NET5.dll": {
             "assemblyVersion": "2.5.0.0",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "2.5.0.0"
           },
           "lib/net5.0/Xceed.Words.NET5.dll": {
             "assemblyVersion": "2.5.0.0",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "2.5.0.0"
           }
         },
         "compile": {
@@ -971,7 +989,7 @@
         "runtime": {
           "lib/netcoreapp3.0/Hangfire.AspNetCore.dll": {
             "assemblyVersion": "1.8.14.0",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "1.8.14.0"
           }
         },
         "compile": {
@@ -985,7 +1003,7 @@
         "runtime": {
           "lib/netstandard2.0/Hangfire.Core.dll": {
             "assemblyVersion": "1.8.14.0",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "1.8.14.0"
           }
         },
         "compile": {
@@ -1002,7 +1020,7 @@
         "runtime": {
           "lib/netstandard2.1/Hangfire.NetCore.dll": {
             "assemblyVersion": "1.8.14.0",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "1.8.14.0"
           }
         },
         "compile": {
@@ -1016,7 +1034,7 @@
         "runtime": {
           "lib/netstandard2.0/Hangfire.SqlServer.dll": {
             "assemblyVersion": "1.8.14.0",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "1.8.14.0"
           }
         },
         "compile": {
@@ -1092,7 +1110,7 @@
           "runtimes/win-x64/native/libwkhtmltox.dll": {
             "rid": "win-x64",
             "assetType": "native",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "0.12.4.0"
           }
         },
         "compile": {
@@ -2717,22 +2735,22 @@
           "runtimes/win-arm/native/Microsoft.Data.SqlClient.SNI.dll": {
             "rid": "win-arm",
             "assetType": "native",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "5.1.0.0"
           },
           "runtimes/win-arm64/native/Microsoft.Data.SqlClient.SNI.dll": {
             "rid": "win-arm64",
             "assetType": "native",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "5.1.0.0"
           },
           "runtimes/win-x64/native/Microsoft.Data.SqlClient.SNI.dll": {
             "rid": "win-x64",
             "assetType": "native",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "5.1.0.0"
           },
           "runtimes/win-x86/native/Microsoft.Data.SqlClient.SNI.dll": {
             "rid": "win-x86",
             "assetType": "native",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "5.1.0.0"
           }
         }
       },
@@ -3305,7 +3323,7 @@
         "runtime": {
           "lib/net20/Microsoft.Office.Interop.Excel.dll": {
             "assemblyVersion": "15.0.0.0",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "15.0.4795.1000"
           }
         },
         "compile": {
@@ -3316,7 +3334,7 @@
         "runtime": {
           "lib/netstandard2.0/Microsoft.Office.Interop.Word.dll": {
             "assemblyVersion": "15.0.0.0",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "15.0.4797.1003"
           }
         },
         "compile": {
@@ -4205,21 +4223,6 @@
           },
           "runtimes/osx-x64/native/libpdfium.dylib": {
             "rid": "osx-x64",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          },
-          "runtimes/win-arm64/native/pdfium.dll": {
-            "rid": "win-arm64",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          },
-          "runtimes/win-x64/native/pdfium.dll": {
-            "rid": "win-x64",
-            "assetType": "native",
-            "fileVersion": "0.0.0.0"
-          },
-          "runtimes/win-x86/native/pdfium.dll": {
-            "rid": "win-x86",
             "assetType": "native",
             "fileVersion": "0.0.0.0"
           }

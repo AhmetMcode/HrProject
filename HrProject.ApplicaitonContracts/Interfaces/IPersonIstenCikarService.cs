@@ -1,6 +1,10 @@
-﻿using System;
-using HrProject.Domain.Entities;
+﻿using HrProject.Domain.Entities;
 using HrProject.Repository.Repositories.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace HrProject.ApplicaitonContracts.Interfaces
 {
@@ -9,4 +13,3 @@ namespace HrProject.ApplicaitonContracts.Interfaces
 
     }
 }
-

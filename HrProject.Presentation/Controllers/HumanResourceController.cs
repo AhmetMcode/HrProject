@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using HrProject.ApplicaitonContracts.Interfaces;
 using HrProject.Application.Services;
 using HrProject.Domain.Entities;
-using HrProject.Domain.Enums;
 using HrProject.Presentation.Models;
 using HrProject.Presentation.ViewModels;
 using NPOI.SS.UserModel;
@@ -26,14 +25,14 @@ namespace HrProject.Presentation.Controllers
         private readonly IPersonBonusService personBonusService;
         private readonly IPersonAdvancePaymentService personAdvancePaymentService;
         private readonly IPersonPermissionService personPermissionService;
+        private readonly IPersonIstenCikarService personIstenCikarService;
         private readonly IPersonPermissionTypeService personPermissionTypeService;
         private readonly IPersonAnnualLeaveService personAnnualLeaveService;
         private readonly ITallyDetailService tallyDetailService;
-        private readonly IPersonIstenCikarService personIstenCikarService;
         private readonly UserManager<ApplicationUser> userManager;
-        private readonly ISafetyIssueService safetyIssueService;
 
-        public HumanResourceController(IPersonPositionService personPositionService, IWorkPlaceService workPlaceService, IMapper mapper, IPersonService personService, IWebHostEnvironment hostEnvironment, IPersonSalaryService personSalaryService, IPersonBonusService personBonusService, IPersonAdvancePaymentService personAdvancePaymentService, IPersonPermissionService personPermissionService, IPersonPermissionTypeService personPermissionTypeService, IPersonAnnualLeaveService personAnnualLeaveService, ITallyDetailService tallyDetailService, IPersonIstenCikarService personIstenCikarService, UserManager<ApplicationUser> userManager, ISafetyIssueService safetyIssueService)
+
+        public HumanResourceController(IPersonPositionService personPositionService, IWorkPlaceService workPlaceService, IMapper mapper, IPersonService personService, IWebHostEnvironment hostEnvironment, IPersonSalaryService personSalaryService, IPersonBonusService personBonusService, IPersonAdvancePaymentService personAdvancePaymentService, IPersonPermissionService personPermissionService, IPersonPermissionTypeService personPermissionTypeService, IPersonAnnualLeaveService personAnnualLeaveService, IPersonIstenCikarService personIstenCikarService, ITallyDetailService tallyDetailService, UserManager<ApplicationUser> userManager)
 
         {
             this.personPositionService = personPositionService;
@@ -48,9 +47,8 @@ namespace HrProject.Presentation.Controllers
             this.personPermissionTypeService = personPermissionTypeService;
             this.personAnnualLeaveService = personAnnualLeaveService;
             this.tallyDetailService = tallyDetailService;
-            this.personIstenCikarService = personIstenCikarService;
             this.userManager = userManager;
-            this.safetyIssueService = safetyIssueService;
+            this.personIstenCikarService = personIstenCikarService;
         }
         public IActionResult Index()
         {
@@ -66,26 +64,6 @@ namespace HrProject.Presentation.Controllers
             ViewBag.Positions = personPositionService.GetPersonPositionsAsSelectListItems();
             ViewBag.WorkPlaces = workPlaceService.GetWorkPlaceAsSelectListItems();
 
-            // Get the issues related to the person
-            var issues = safetyIssueService.GetIssuesByPersonId(id);
-
-            // Dictionary to store the user's full name
-            var userNames = new Dictionary<string, string>();
-
-            // Populate the userNames dictionary with user details
-            foreach (var issue in issues)
-            {
-                if (!string.IsNullOrEmpty(issue.ReportedById) && !userNames.ContainsKey(issue.ReportedById))
-                {
-                    var user = userManager.FindByIdAsync(issue.ReportedById).Result;
-                    if (user != null)
-                    {
-                        userNames[issue.ReportedById] = $"{user.Name} {user.SurName}";
-                    }
-                }
-            }
-
-            ViewBag.UserNames = userNames;
 
             PersonDetailViewModel viewModel = new PersonDetailViewModel
             {
@@ -97,7 +75,6 @@ namespace HrProject.Presentation.Controllers
                 PersonPermissions = personPermissionService.GetIncludeType().Where(x => x.PersonId == id),
                 PersonPermissionTypes = personPermissionTypeService.GetAll(),
                 PersonAnnualLeaves = personAnnualLeaveService.GetAll(),
-                Issues = issues
             };
 
             ViewBag.TotalPermission = personAnnualLeaveService.GetTotalPermissionDay(id);

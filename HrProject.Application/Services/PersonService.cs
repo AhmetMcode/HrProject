@@ -28,7 +28,7 @@ namespace HrProject.Application.Services
             var momentSalary = _context.PersonSalaries.Where(x => x.PersonId == personId && x.StartDate.Month == tarih.Month).LastOrDefault();
             decimal CalismasiGerekenSaat = person.WorkingTime;
             decimal mesaiCarpan = person.MesaiCarpan;
-            decimal calisilanSaat = Convert.ToDecimal(_context.TallyDetails.Where(x => x.PersonId == personId).ToList().Sum(x => x.WorkTime));
+            decimal calisilanSaat = Convert.ToDecimal(_context.TallyDetail.Where(x => x.PersonId == personId).ToList().Sum(x => x.WorkTime));
             PersonMounthPayment personMounthPayment = new PersonMounthPayment();
             personMounthPayment.Maas = momentSalary.Salary;
             personMounthPayment.CalisilanSaat += calisilanSaat;

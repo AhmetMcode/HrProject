@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using HrProject.ApplicaitonContracts.Interfaces;
 using HrProject.Domain.Entities;
-using HrProject.Presentation.Data.Migrations;
 using System.Security.Claims;
 
 namespace HrProject.Presentation.Controllers

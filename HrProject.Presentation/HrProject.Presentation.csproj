@@ -12,6 +12,24 @@
 		<WarningLevel>4</WarningLevel>
 	</PropertyGroup>
 	<ItemGroup>
+	  <Compile Remove="Views\Offer\**" />
+	  <Compile Remove="Views\Quality\**" />
+	  <Compile Remove="Views\StockCount\**" />
+	  <Compile Remove="Views\Unit\**" />
+	  <Content Remove="Views\Offer\**" />
+	  <Content Remove="Views\Quality\**" />
+	  <Content Remove="Views\StockCount\**" />
+	  <Content Remove="Views\Unit\**" />
+	  <EmbeddedResource Remove="Views\Offer\**" />
+	  <EmbeddedResource Remove="Views\Quality\**" />
+	  <EmbeddedResource Remove="Views\StockCount\**" />
+	  <EmbeddedResource Remove="Views\Unit\**" />
+	  <None Remove="Views\Offer\**" />
+	  <None Remove="Views\Quality\**" />
+	  <None Remove="Views\StockCount\**" />
+	  <None Remove="Views\Unit\**" />
+	</ItemGroup>
+	<ItemGroup>
 		<Content Remove="C:\Users\musta\.nuget\packages\gridmvccore\7.0.2\contentFiles\any\net7.0\Resources\css\gridmvc-bootstrap3.css" />
 		<Content Remove="C:\Users\musta\.nuget\packages\gridmvccore\7.0.2\contentFiles\any\net7.0\Resources\css\gridmvc-bootstrap3.min.css" />
 		<Content Remove="C:\Users\musta\.nuget\packages\gridmvccore\7.0.2\contentFiles\any\net7.0\Resources\css\gridmvc.css" />
@@ -45,10 +63,6 @@
 		<Content Remove="C:\Users\musta\.nuget\packages\gridmvccore\7.0.2\contentFiles\any\net7.0\Resources\js\gridmvc.js" />
 		<Content Remove="C:\Users\musta\.nuget\packages\gridmvccore\7.0.2\contentFiles\any\net7.0\Resources\js\gridmvc.min.js" />
 		<Content Remove="Views\HumanResource\AllPersonels.cshtml" />
-		<Content Remove="Views\Offer\GetOfferAndAtama.cshtml" />
-		<Content Remove="Views\Offer\TeklifRaporlari.cshtml" />
-		<Content Remove="Views\Quality\GetQualityForm.cshtml" />
-		<Content Remove="Views\Unit\AddAndList.cshtml" />
 		<Content Remove="wwwroot\ORMDataModel1.xpo" />
 		<Content Remove="wwwroot\ORMDataModel1.xpo.diagram" />
 		<Content Remove="wwwroot\js\HumanResource\" />
@@ -123,8 +137,6 @@
 		<Folder Include="wwwroot\Rotativa\" />
 		<Folder Include="wwwroot\PersonPermission\" />
 		<Folder Include="wwwroot\js\HumanResource\" />
-		<Folder Include="Views\ISGSafetyIssue\" />
-		<Folder Include="Views\StockCount\" />
 	</ItemGroup>
 	<ItemGroup>
 	  <None Remove="Views\ISGSafetyIssue\" />
@@ -132,10 +144,6 @@
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="Views\HumanResource\AllPersonels.cshtml" />
-		<None Include="Views\Offer\GetOfferAndAtama.cshtml" />
-		<None Include="Views\Offer\TeklifRaporlari.cshtml" />
-		<None Include="Views\Quality\GetQualityForm.cshtml" />
-		<None Include="Views\Unit\AddAndList.cshtml" />
 		<None Include="wwwroot\bootstrap-5.3.3-dist\css\bootstrap-grid.css.map" />
 		<None Include="wwwroot\bootstrap-5.3.3-dist\css\bootstrap-grid.min.css.map" />
 		<None Include="wwwroot\bootstrap-5.3.3-dist\css\bootstrap-grid.rtl.css.map" />
@@ -2066,17 +2074,5 @@
 	</ItemGroup>
 	<ItemGroup>
 		<_ContentIncludedByDefault Remove="Views\HumanResource\AllPersonels.cshtml" />
-		<_ContentIncludedByDefault Remove="Views\Offer\GetOfferAndAtama.cshtml" />
-		<_ContentIncludedByDefault Remove="Views\Offer\TeklifRaporlari.cshtml" />
-		<_ContentIncludedByDefault Remove="Views\Quality\GetQualityForm.cshtml" />
-	</ItemGroup>
-	<ItemGroup>
-		<UpToDateCheckInput Remove="Views\Offer\GetOfferAndAtama.cshtml" />
-	</ItemGroup>
-	<ItemGroup>
-		<UpToDateCheckInput Remove="Views\Quality\GetQualityForm.cshtml" />
-	</ItemGroup>
-	<ItemGroup>
-	  <UpToDateCheckInput Remove="Views\Offer\TeklifRaporlari.cshtml" />
 	</ItemGroup>
 </Project>

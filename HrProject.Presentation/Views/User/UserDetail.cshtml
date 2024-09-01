@@ -6,8 +6,6 @@
     var allRoles = ViewBag.AllRoles as List<IdentityRole>;
     var myCalismaYerleriHr = ViewBag.MyCalismaYerleri as List<Workplace>;
     var CalismaYerleriHr = ViewBag.TumCalismaYerleri as List<Workplace>;
-    var TumUretimYerleri = ViewBag.TumUretimYerleri as List<ProductionPlace>;
-    var myUretimYerleri = ViewBag.MyUretimYerleri as List<ProductionPlace>;
     var user = ViewBag.User as ApplicationUser;
 }
 <div class="card">
@@ -99,37 +97,7 @@
                     </button>
                 </div>
             </div>
-            <div class="card-body">
-                <ul id="allUretim" class="list-group droppable">
-                    @if (myUretimYerleri != null)
-                    {
-                        @foreach (var step in TumUretimYerleri.Where(x => !myUretimYerleri.Select(x => x.Id).Contains(x.Id)))
-                        {
-                            <li class="list-group-item" data-id="@step.Id">
-                                <div class="row">
-                                    <div class="col-3">
-                                        <span>@step.Name</span>
-                                    </div>
-                                </div>
-                            </li>
-                        }
-                    }
-                    else
-                    {
-                        @foreach (var step in TumUretimYerleri.ToList())
-                        {
-                            <li class="list-group-item" data-id="@step.Id">
-                                <div class="row">
-                                    <div class="col-3">
-                                        <span>@step.Name</span>
-                                    </div>
-                                </div>
-                            </li>
-                        }
-                    }
-
-                </ul>
-            </div>
+            
         </div>
     </div>
     <div class="col-md-6">
@@ -145,33 +113,7 @@
                     </button>
                 </div>
             </div>
-            <div class="card-body">
-                <ul id="myUretimYerleri" class="list-group droppable">
-                    @if (myUretimYerleri != null && myUretimYerleri.Count != 0)
-                    {
-                        @foreach (var step in myUretimYerleri)
-                        {
-                            <li class="list-group-item" data-id="@step.Id">
-                                <div class="row">
-                                    <div class="col-3">
-                                        <span>@step.Name</span>
-                                    </div>
-                                </div>
-                            </li>
-                        }
-                    }
-                    else
-                    {
-                        <li class="list-group-item">
-                            <div class="row">
-                                <div class="col-3">
-                                    <span>Üretim Ve Kalite Modülünde Kullanılacak Yer Yok</span>
-                                </div>
-                            </div>
-                        </li>
-                    }
-                </ul>
-            </div>
+           
         </div>
     </div>
 </div>

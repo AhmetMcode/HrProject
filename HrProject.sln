@@ -3,22 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HrProject.Domain", "HrProject.Domain/HrProject.Domain.csproj", "{5628CB12-44AA-47D4-B60D-A779D5082DD1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HrProject.Domain", "HrProject.Domain\HrProject.Domain.csproj", "{5628CB12-44AA-47D4-B60D-A779D5082DD1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HrProject.Infrastructure", "HrProject.Infrastructure/HrProject.Infrastructure.csproj", "{50812810-E80C-4D93-905A-2DACBF0BB485}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HrProject.Infrastructure", "HrProject.Infrastructure\HrProject.Infrastructure.csproj", "{50812810-E80C-4D93-905A-2DACBF0BB485}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HrProject.Repository", "HrProject.Repository/HrProject.Repository.csproj", "{D2939EC0-3859-480F-87A2-CCEFC731086D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HrProject.Repository", "HrProject.Repository\HrProject.Repository.csproj", "{D2939EC0-3859-480F-87A2-CCEFC731086D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HrProject.Application", "HrProject.Application/HrProject.Application.csproj", "{8F6039E7-0E27-4821-A69B-C600EB8DF717}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HrProject.Application", "HrProject.Application\HrProject.Application.csproj", "{8F6039E7-0E27-4821-A69B-C600EB8DF717}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HrProject.ApplicaitonContracts", "HrProject.ApplicaitonContracts/HrProject.ApplicaitonContracts.csproj", "{E5E8EF2F-6E00-45B2-BDC2-17BADE4F0F2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HrProject.ApplicaitonContracts", "HrProject.ApplicaitonContracts\HrProject.ApplicaitonContracts.csproj", "{E5E8EF2F-6E00-45B2-BDC2-17BADE4F0F2C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HrProject.Presentation", "HrProject.Presentation/HrProject.Presentation.csproj", "{67E6403A-7917-4369-9587-882D0BB1C357}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DevExtreme NuGet.config", "DevExtreme NuGet.config", "{EC170296-A52E-46F7-A59A-AAC0486C12B5}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet.config = NuGet.config
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HrProject.Presentation", "HrProject.Presentation\HrProject.Presentation.csproj", "{67E6403A-7917-4369-9587-882D0BB1C357}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

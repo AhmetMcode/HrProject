@@ -100,11 +100,11 @@
         "runtime": {
           "lib/net5.0/Xceed.Document.NET5.dll": {
             "assemblyVersion": "2.5.0.0",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "2.5.0.0"
           },
           "lib/net5.0/Xceed.Words.NET5.dll": {
             "assemblyVersion": "2.5.0.0",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "2.5.0.0"
           }
         }
       },
@@ -205,7 +205,7 @@
         "runtime": {
           "lib/netcoreapp3.0/Hangfire.AspNetCore.dll": {
             "assemblyVersion": "1.8.14.0",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "1.8.14.0"
           }
         }
       },
@@ -216,7 +216,7 @@
         "runtime": {
           "lib/netstandard2.0/Hangfire.Core.dll": {
             "assemblyVersion": "1.8.14.0",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "1.8.14.0"
           }
         }
       },
@@ -230,7 +230,7 @@
         "runtime": {
           "lib/netstandard2.1/Hangfire.NetCore.dll": {
             "assemblyVersion": "1.8.14.0",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "1.8.14.0"
           }
         }
       },
@@ -241,7 +241,7 @@
         "runtime": {
           "lib/netstandard2.0/Hangfire.SqlServer.dll": {
             "assemblyVersion": "1.8.14.0",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "1.8.14.0"
           }
         }
       },
@@ -311,7 +311,7 @@
           "runtimes/win-x64/native/libwkhtmltox.dll": {
             "rid": "win-x64",
             "assetType": "native",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "0.12.4.0"
           }
         }
       },
@@ -715,22 +715,22 @@
           "runtimes/win-arm/native/Microsoft.Data.SqlClient.SNI.dll": {
             "rid": "win-arm",
             "assetType": "native",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "5.1.0.0"
           },
           "runtimes/win-arm64/native/Microsoft.Data.SqlClient.SNI.dll": {
             "rid": "win-arm64",
             "assetType": "native",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "5.1.0.0"
           },
           "runtimes/win-x64/native/Microsoft.Data.SqlClient.SNI.dll": {
             "rid": "win-x64",
             "assetType": "native",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "5.1.0.0"
           },
           "runtimes/win-x86/native/Microsoft.Data.SqlClient.SNI.dll": {
             "rid": "win-x86",
             "assetType": "native",
-            "fileVersion": "0.0.0.0"
+            "fileVersion": "5.1.0.0"
           }
         }
       },

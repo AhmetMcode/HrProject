@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using HrProject.ApplicaitonContracts.Interfaces;
 using HrProject.Application.Services;
 using HrProject.Domain.Entities;
-using HrProject.Presentation.Data.Migrations;
 using HrProject.Presentation.Models;
 using HrProject.Presentation.ViewModels;
 using System.Security.Claims;
@@ -21,12 +20,12 @@ public class UserController : Controller
     private readonly UserManager<ApplicationUser> userManager;
     private readonly RoleManager<IdentityRole> roleManager;
     private readonly IWorkPlaceService workPlaceService;
-    private readonly IProductionPlace productionPlaceService;
-    private readonly IUnitService unitService;
+    
+
     private readonly ILogsKayitService logsKayitService;
     private readonly IUserEmailService userEmailSetService;
 
-    public UserController(IUserService userService, IMapper mapper, IWebHostEnvironment hostEnvironment, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IWorkPlaceService workPlaceService, IProductionPlace productionPlaceService, IUnitService unitService, ILogsKayitService logsKayitService, IUserEmailService userEmailSetService)
+    public UserController(IUserService userService, IMapper mapper, IWebHostEnvironment hostEnvironment, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IWorkPlaceService workPlaceService, ILogsKayitService logsKayitService, IUserEmailService userEmailSetService)
     {
         this.userService = userService;
         this.mapper = mapper;
@@ -34,8 +33,6 @@ public class UserController : Controller
         this.userManager = userManager;
         this.roleManager = roleManager;
         this.workPlaceService = workPlaceService;
-        this.productionPlaceService = productionPlaceService;
-        this.unitService = unitService;
         this.logsKayitService = logsKayitService;
         this.userEmailSetService = userEmailSetService;
     }
@@ -98,19 +95,16 @@ public class UserController : Controller
         var roles = roleManager.Roles.ToList();
         var user = await userManager.FindByIdAsync(id);
         var calismaYerleriHr = workPlaceService.GetAll().ToList();
-        var uretimYerleri = productionPlaceService.GetAll().ToList();
         var myUretimYerleriDizi = FileWork.StringToIntArray(user.ResponsibleWareHouseFabrica).ToList();
         var myCalismaYerleriDizi = FileWork.StringToIntArray(user.ResponsibleHrLocation).ToList();
         var myCalismaYerleriHr = calismaYerleriHr.Where(x => myCalismaYerleriDizi.Contains(x.Id)).ToList();
-        var myUretimYerleri = uretimYerleri.Where(x => myUretimYerleriDizi.Contains(x.Id)).ToList();
         var myRoles = await userManager.GetRolesAsync(user); // Kullanıcının rollerini al
         ViewBag.AllRoles = roles;
         ViewBag.MyRoles = myRoles;
         ViewBag.User = user;
         ViewBag.TumCalismaYerleri = calismaYerleriHr;
         ViewBag.MyCalismaYerleri = myCalismaYerleriHr;
-        ViewBag.MyUretimYerleri = myUretimYerleri;
-        ViewBag.TumUretimYerleri = uretimYerleri;
+
         return View();
     }
     [HttpPost]
@@ -325,21 +319,10 @@ public class UserController : Controller
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var user = await userService.GetById(userId);
         var userUpdateViewModel = mapper.Map<UserUpdateViewModel>(user);
-        var infoComp = unitService.GetinfoCompany();
-        ViewBag.InfoComp = infoComp;
         ViewBag.ChangePassword = false;
         return View(userUpdateViewModel);
     }
-    public async Task<IActionResult> UpdateInfoComp(InfoCompany company, IFormFile resim)
-    {
-        if (resim != null)
-        {
-            company.Resim = FileWork.ReturnFileName(resim, "HR", hostEnvironment);
 
-        }
-        var infoComp = unitService.GetAddinfoCompany(company, resim);
-        return RedirectToAction("Index");
-    }
     [HttpPost]
     public async Task<IActionResult> AddRole(string userId, string roleId)
     {
@@ -500,8 +483,7 @@ public class UserController : Controller
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
         var user2 = await userService.GetById(userId);
         var userUpdateViewModel = mapper.Map<UserUpdateViewModel>(user2);
-        var infoComp = unitService.GetinfoCompany();
-        ViewBag.InfoComp = infoComp;
+
         if (newpassword != renewPassword)
         {
             // Yeni şifre ile şifre tekrarı eşleşmiyorsa hata döndür.

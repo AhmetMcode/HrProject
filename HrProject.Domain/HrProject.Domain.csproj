@@ -18,4 +18,8 @@
     <PackageReference Include="WkHtmlToPdf" Version="1.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Enums\" />
+  </ItemGroup>
+
 </Project>

@@ -8,7 +8,6 @@
 @using HrProject.Domain.Entities;
 @{
 
-    var infoComp = ViewBag.InfoComp as InfoCompany;
     var changePass = ViewBag.ChangePassword;
     var user = await UserManager.GetUserAsync(User);
     var role = await UserManager.GetRolesAsync(user);
@@ -314,128 +313,7 @@
                         </form><!-- End Change Password Form -->
                     </div>
 
-                    <div class="tab-pane fade info-company pt-3" id="info-company" role="tabpanel">
-                        <!-- Change Password Form -->
-                        <form asp-action="UpdateInfoComp" method="post" enctype="multipart/form-data">
-                            <input type="hidden" name="Id" value="@infoComp.Id" />
-                            <input type="hidden" name="Resim" value="@infoComp.Resim" />
-                            <div class="row mb-3">
-                                <label for="EArsivHarf" class="col-md-4 col-lg-3 col-form-label">EArsivHarf</label>
-                                <div class="col-md-8 col-lg-9">
-                                    <input name="EArsivHarf" value="@infoComp.EArsivHarf" type="text" class="form-control" id="EArsivHarf">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <label for="Unvan" class="col-md-4 col-lg-3 col-form-label">Firma Logosu</label>
-                                <div class="col-md-8 col-lg-9">
-                                    <input name="resim"  type="file" class="form-control" id="Resim">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <label for="Unvan" class="col-md-4 col-lg-3 col-form-label">Unvan</label>
-                                <div class="col-md-8 col-lg-9">
-                                    <input name="Unvan" value="@infoComp.Unvan"  type="text" class="form-control" id="Unvan">
-                                </div>
-                            </div>
-                            
-                            <div class="row mb-3">
-                                <label for="YetkiliAdSoyad" class="col-md-4 col-lg-3 col-form-label">YetkiliAdSoyad</label>
-                                <div class="col-md-8 col-lg-9">
-                                    <input name="YetkiliAdSoyad" value="@infoComp.YetkiliAdSoyad" type="text" class="form-control" id="YetkiliAdSoyad">
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label for="VKN_TCKN" class="col-md-4 col-lg-3 col-form-label">VKN_TCKN</label>
-                                <div class="col-md-8 col-lg-9">
-                                    <input name="VKN_TCKN" type="text" value="@infoComp.VKN_TCKN" class="form-control" id="VKN_TCKN">
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label for="VergiDairesi" class="col-md-4 col-lg-3 col-form-label">VergiDairesi</label>
-                                <div class="col-md-8 col-lg-9">
-                                    <input name="VergiDairesi" type="text" value="@infoComp.VergiDairesi" class="form-control" id="VergiDairesi">
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label for="TicaretSicilNo" class="col-md-4 col-lg-3 col-form-label">TicaretSicilNo</label>
-                                <div class="col-md-8 col-lg-9">
-                                    <input name="TicaretSicilNo" type="text" value="@infoComp.TicaretSicilNo" class="form-control" id="TicaretSicilNo">
-                                </div>
-                            </div>
-
-                          
-                            <div class="row mb-3">
-                                <label for="Telefon" class="col-md-4 col-lg-3 col-form-label">Telefon</label>
-                                <div class="col-md-8 col-lg-9">
-                                    <input name="Telefon" type="text" value="@infoComp.Telefon" class="form-control" id="Telefon">
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label for="WebAdres" class="col-md-4 col-lg-3 col-form-label">WebAdres</label>
-                                <div class="col-md-8 col-lg-9">
-                                    <input name="WebAdres" type="text" value="@infoComp.WebAdres" class="form-control" id="WebAdres">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <label for="KapiNo" class="col-md-4 col-lg-3 col-form-label">KapiNo</label>
-                                <div class="col-md-8 col-lg-9">
-                                    <input name="KapiNo" type="text" value="@infoComp.KapiNo" class="form-control" id="KapiNo">
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label for="BinaNo" class="col-md-4 col-lg-3 col-form-label">BinaNo</label>
-                                <div class="col-md-8 col-lg-9">
-                                    <input name="BinaNo" type="text" value="@infoComp.BinaNo" class="form-control" id="BinaNo">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <label for="CaddeSokakBulvar" class="col-md-4 col-lg-3 col-form-label">CaddeSokakBulvar</label>
-                                <div class="col-md-8 col-lg-9">
-                                    <input name="CaddeSokakBulvar" value="@infoComp.CaddeSokakBulvar" type="text" class="form-control" id="CaddeSokakBulvar">
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label for="IlceSemtMahalle" class="col-md-4 col-lg-3 col-form-label">IlceSemtMahalle</label>
-                                <div class="col-md-8 col-lg-9">
-                                    <input name="IlceSemtMahalle" type="text" value="@infoComp.IlceSemtMahalle" class="form-control" id="IlceSemtMahalle">
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label for="Sehir" class="col-md-4 col-lg-3 col-form-label">Sehir</label>
-                                <div class="col-md-8 col-lg-9">
-                                    <input name="Sehir" type="text" class="form-control" value="@infoComp.Sehir" id="Sehir">
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label for="Ulke" class="col-md-4 col-lg-3 col-form-label">Ulke</label>
-                                <div class="col-md-8 col-lg-9">
-                                    <input name="Ulke" type="text" class="form-control" value="@infoComp.Ulke" id="Ulke">
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <label for="SirketAdresi" class="col-md-4 col-lg-3 col-form-label">SirketAdresi</label>
-                                <div class="col-md-8 col-lg-9">
-                                    <input name="SirketAdresi" type="text" class="form-control" value="@infoComp.SirketAdresi" id="SirketAdresi">
-                                </div>
-                            </div>
-
-
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-primary">Kaydet</button>
-                            </div>
-
-
-                        </form><!-- End Change Password Form -->
-                    </div>
+                  
                 </div><!-- End Bordered Tabs -->
 
             </div>

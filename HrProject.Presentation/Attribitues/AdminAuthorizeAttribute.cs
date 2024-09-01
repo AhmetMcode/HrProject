@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc;
-using HrProject.Presentation.Data.Migrations;
 using HrProject.Domain.Entities;
 
 namespace HrProject.Presentation.Attribitues

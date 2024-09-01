@@ -11,11 +11,10 @@ namespace HrProject.Application.Services
 {
     public class NotificationService : BaseRepository<Domain.Entities.Notification>, INotificationService
     {
-        private readonly IVisitorEntryService visitorEntryService;
+        
 
-        public NotificationService(DbContextOptions<ApplicationDbContext> options, IVisitorEntryService visitorEntryService) : base(options)
+        public NotificationService(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
-            this.visitorEntryService = visitorEntryService;
         }
 
         public bool ExistsByProperty<TProperty>(System.Linq.Expressions.Expression<Func<Domain.Entities.Notification, TProperty>> propertySelector, TProperty value)
@@ -182,14 +181,6 @@ namespace HrProject.Application.Services
             throw new NotImplementedException();
         }
 
-        public void SendTerminNotification(string userId, string message)
-        {
-            var deviceToken = visitorEntryService.GetTokenUser(userId);
-            if (deviceToken != null)
-            {
-                SendMobileNotifAsync("Termin", message, deviceToken.Token);
-            }
-        }
 
         public void Update(Domain.Entities.Notification entity)
         {

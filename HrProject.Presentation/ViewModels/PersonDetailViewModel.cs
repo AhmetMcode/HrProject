@@ -24,7 +24,6 @@ namespace HrProject.Presentation.ViewModels
         public PersonAdvancePayment PersonAdvancePayment { get; set; }
         public IFormFile PersonPermissionFile { get; set; }
         public IFormFile IstenCikisDosya { get; set; }
-        public List<ISGSafetyIssue> Issues { get; set; }
     }
 
     public enum PostType

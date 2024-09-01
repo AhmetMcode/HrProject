@@ -18719,40 +18719,46 @@
     ]
   },
   "packageFolders": {
-    "/Users/mcodesoft/.nuget/packages/": {}
+    "C:\\Users\\Ahmet\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/mcodesoft/Desktop/HrProject/HrProject.Presentation/HrProject.Presentation.csproj",
+      "projectUniqueName": "C:\\Users\\Ahmet\\source\\repos\\HrProject\\HrProject.Presentation\\HrProject.Presentation.csproj",
       "projectName": "HrProject.Presentation",
-      "projectPath": "/Users/mcodesoft/Desktop/HrProject/HrProject.Presentation/HrProject.Presentation.csproj",
-      "packagesPath": "/Users/mcodesoft/.nuget/packages/",
-      "outputPath": "/Users/mcodesoft/Desktop/HrProject/HrProject.Presentation/obj/",
+      "projectPath": "C:\\Users\\Ahmet\\source\\repos\\HrProject\\HrProject.Presentation\\HrProject.Presentation.csproj",
+      "packagesPath": "C:\\Users\\Ahmet\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Ahmet\\source\\repos\\HrProject\\HrProject.Presentation\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "/Users/mcodesoft/Desktop/HrProject/NuGet.Config",
-        "/Users/mcodesoft/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Ahmet\\source\\repos\\HrProject\\NuGet.Config",
+        "C:\\Users\\Ahmet\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
       ],
       "sources": {
-        "/usr/local/share/dotnet/library-packs": {},
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
           "projectReferences": {
-            "/Users/mcodesoft/Desktop/HrProject/HrProject.ApplicaitonContracts/HrProject.ApplicaitonContracts.csproj": {
-              "projectPath": "/Users/mcodesoft/Desktop/HrProject/HrProject.ApplicaitonContracts/HrProject.ApplicaitonContracts.csproj"
+            "C:\\Users\\Ahmet\\source\\repos\\HrProject\\HrProject.ApplicaitonContracts\\HrProject.ApplicaitonContracts.csproj": {
+              "projectPath": "C:\\Users\\Ahmet\\source\\repos\\HrProject\\HrProject.ApplicaitonContracts\\HrProject.ApplicaitonContracts.csproj"
             },
-            "/Users/mcodesoft/Desktop/HrProject/HrProject.Application/HrProject.Application.csproj": {
-              "projectPath": "/Users/mcodesoft/Desktop/HrProject/HrProject.Application/HrProject.Application.csproj"
+            "C:\\Users\\Ahmet\\source\\repos\\HrProject\\HrProject.Application\\HrProject.Application.csproj": {
+              "projectPath": "C:\\Users\\Ahmet\\source\\repos\\HrProject\\HrProject.Application\\HrProject.Application.csproj"
             },
-            "/Users/mcodesoft/Desktop/HrProject/HrProject.Infrastructure/HrProject.Infrastructure.csproj": {
-              "projectPath": "/Users/mcodesoft/Desktop/HrProject/HrProject.Infrastructure/HrProject.Infrastructure.csproj"
+            "C:\\Users\\Ahmet\\source\\repos\\HrProject\\HrProject.Infrastructure\\HrProject.Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\Ahmet\\source\\repos\\HrProject\\HrProject.Infrastructure\\HrProject.Infrastructure.csproj"
             }
           }
         }
@@ -18981,21 +18987,11 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/7.0.410/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.403\\RuntimeIdentifierGraph.json"
       }
     }
   },
   "logs": [
-    {
-      "code": "NU1608",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Detected package version outside of dependency constraint: Microsoft.CodeAnalysis.VisualBasic 3.3.1 requires Microsoft.CodeAnalysis.Common (= 3.3.1) but version Microsoft.CodeAnalysis.Common 4.9.2 was resolved.",
-      "libraryId": "Microsoft.CodeAnalysis.Common",
-      "targetGraphs": [
-        "net7.0"
-      ]
-    },
     {
       "code": "NU1608",
       "level": "Warning",
@@ -19012,6 +19008,16 @@
       "warningLevel": 1,
       "message": "Detected package version outside of dependency constraint: Microsoft.CodeAnalysis.CSharp.Features 4.4.0 requires Microsoft.CodeAnalysis.CSharp (= 4.4.0) but version Microsoft.CodeAnalysis.CSharp 4.9.2 was resolved.",
       "libraryId": "Microsoft.CodeAnalysis.CSharp",
+      "targetGraphs": [
+        "net7.0"
+      ]
+    },
+    {
+      "code": "NU1608",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Detected package version outside of dependency constraint: Microsoft.CodeAnalysis.VisualBasic 3.3.1 requires Microsoft.CodeAnalysis.Common (= 3.3.1) but version Microsoft.CodeAnalysis.Common 4.9.2 was resolved.",
+      "libraryId": "Microsoft.CodeAnalysis.Common",
       "targetGraphs": [
         "net7.0"
       ]

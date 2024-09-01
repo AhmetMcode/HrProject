@@ -16,7 +16,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HrProject.Presentation.Areas.Identity.Pages.Account
 {
-    [Authorize(Roles = Roller.Role_Admin)]
+    [AllowAnonymous]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;

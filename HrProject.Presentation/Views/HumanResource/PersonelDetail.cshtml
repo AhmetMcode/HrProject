@@ -1,5 +1,4 @@
-﻿@using HrProject.Domain.Enums
-@using HrProject.Presentation.ViewModels;
+﻿@using HrProject.Presentation.ViewModels;
 @model PersonDetailViewModel
 
 @{
@@ -575,79 +574,6 @@
                                 </div>
                             </div>
                     </div>
-                    @*ISG Hatalari*@
-                    <div class="tab-pane fade" id="tab7info">
-                        <div class="d-flex justify-content-between mt-2">
-                            <div>
-                                <h4 class="person-info-heading">İSG Hataları</h4>
-                            </div>
-                        </div>
-                        <div class="table-responsive" id="tab7info">
-                            <table id="isgTable" class="table table-hover custom-table" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>Açıklama</th>
-                                        <th>Kategori</th>
-                                        <th>Alt Kategori</th>
-                                        <th>Risk Seviyesi</th>
-                                        <th>Bildiren Kullanıcı</th>
-                                        <th>Rapor Tarihi</th>
-                                        <th>Resimler</th>
-                                        <th>İşlemler</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var issue in Model.Issues)
-                                    {
-                                        <tr data-issue-id="@issue.Id">
-                                            <td>@issue.Description</td>
-                                            <td>@(issue.Category?.Name ?? "Kategori Yok")</td>
-                                            <td>@(issue.SubCategory?.Name ?? "Alt Kategori Yok")</td>
-                                            <td>
-                                                @(issue.RiskLevel == ISGRiskLevel.DusukRiskli ? "Düşük" : issue.RiskLevel == ISGRiskLevel.OrtaRiskli ? "Orta" : "Yüksek")
-                                            </td>
-                                            <td>
-                                                @if (!string.IsNullOrEmpty(issue.ReportedById) && ViewBag.UserNames.ContainsKey(issue.ReportedById))
-                                                {
-                                                    @ViewBag.UserNames[issue.ReportedById]
-                                                }
-                                                else
-                                                {
-                                                    <span>Kullanıcı Bilgisi Yok</span>
-                                                }
-                                            </td>
-                                            <td>@issue.ReportDate.ToString("dd.MM.yyyy")</td>
-                                            <td>
-                                                @if (issue.Images != null && issue.Images.Any())
-                                                {
-                                                    foreach (var img in issue.Images)
-                                                    {
-                                                        <a href="~/SafetyIssueImages/@img.ImagePath" data-fancybox="gallery-@issue.Id" data-caption="@issue.Description">
-                                                            <img src="~/SafetyIssueImages/@img.ImagePath" alt="Resim" style="width: 50px; height: 50px;" />
-                                                        </a>
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    <span>Resim Yok</span>
-                                                }
-                                            </td>
-                                            <td>
-                                                <a class="btn btn-warning" asp-action="Edit" asp-controller="ISGSafetyIssue" asp-route-id="@issue.Id">Düzenle</a>
-                                                <form id="deleteForm-@issue.Id" asp-action="Delete" asp-controller="ISGSafetyIssue" asp-route-id="@issue.Id" method="post" style="display:inline;">
-                                                    <button type="submit" class="btn btn-danger">Sil</button>
-                                                </form>
-
-                                            </td>
-
-                                        </tr>
-                                    }
-                                </tbody>
-
-                            </table>
-                        </div>
-                    </div>
-
 
                     @*Maaş*@
                     <div class="tab-pane fade" id="tab6info">
@@ -984,27 +910,7 @@
                 ]
             });
 
-            // İSG Hataları tablosu için DataTable entegrasyonu
-            var isgTable;
 
-            // Tab gösterildiğinde DataTable'ı yeniden başlatma
-            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-                var target = $(e.target).attr("href"); // Aktif olan tabın ID'sini al
-                if (target === "#tab4info" && !$.fn.DataTable.isDataTable('#isgTable')) {
-                    isgTable = $('#isgTable').DataTable({
-                        language: {
-                            url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/tr.json',
-                        },
-                        dom: 'Bfrtip',
-                        buttons: [
-                            'copyHtml5',
-                            'excelHtml5',
-                            'csvHtml5',
-                            'pdfHtml5'
-                        ]
-                    });
-                }
-            });
 
             // Diğer fonksiyonlar
             function btnGenelDuzenle() {
