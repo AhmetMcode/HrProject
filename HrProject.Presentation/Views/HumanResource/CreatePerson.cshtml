@@ -1,0 +1,276 @@
+﻿@model HrProject.Presentation.ViewModels.PersonCreateVM
+
+<div class="card">
+    <div class="card-body">
+        <form asp-action="CreatePerson" enctype="multipart/form-data" method="post">
+
+            <div class="row">
+
+                <div class="col-lg-6">
+                    <fieldset>
+                        <legend>Kişisel Bilgiler</legend>
+                        <div class="row mb-3">
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-10">
+                                <img id="profilePicturePreview" src="#" alt="Seçilen resim burada gösterilecek" style="max-width: 200px; display:none;" />
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label asp-for="ProfilePicture" class="col-sm-2 col-form-label">Profil Resmi:</label>
+                            <div class="col-sm-10">
+                                <input asp-for="ProfilePicture" type="file" class="form-control" accept="image/*" id="profilePictureInput">
+                                <span asp-validation-for="ProfilePicture" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label asp-for="TcNo" class="col-sm-2 col-form-label">Tc:</label>
+                            <div class="col-sm-10">
+                                <input asp-for="TcNo" type="text" class="form-control" id="inputText">
+                                <span asp-validation-for="TcNo" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label asp-for="Name" class="col-sm-2 col-form-label">Ad:</label>
+                            <div class="col-sm-10">
+                                <input asp-for="Name" type="text" class="form-control" id="inputText">
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label asp-for="Surname" class="col-sm-2 col-form-label">Soyad:</label>
+                            <div class="col-sm-10">
+                                <input asp-for="Surname" type="text" class="form-control" id="inputText">
+                                <span asp-validation-for="Surname" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label asp-for="PhoneNumber" class="col-sm-2 col-form-label">Telefon:</label>
+                            <div class="col-sm-10">
+                                <input asp-for="PhoneNumber" type="text" class="form-control" id="inputText">
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label asp-for="PersonPositionId" class="col-sm-2 col-form-label">Çalışan Pozisyonu:</label>
+                            <div class="col-sm-8">
+                                <select asp-for="PersonPositionId" name="PersonPositionId" class="form-control" id="positionSelect" asp-items="@Model.PositionsList">
+                                    <option value="">Pozisyon Seçiniz</option>
+                                </select>
+                                <span asp-validation-for="PersonPositionId" class="text-danger"></span>
+                            </div>
+                            <div class="col-sm-2">
+                                <a asp-action="CreatePersonPosition" asp-controller="HumanResource" type="button" class="btn btn-success px-2">
+                                    <i class="fas fa-plus" style="font-size:14px;"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label asp-for="WorkplaceId" class="col-sm-2 col-form-label">Çalışma Yeri:</label>
+                            <div class="col-sm-8">
+                                <select asp-for="WorkplaceId" class="form-control" id="workPlaceSelect" name="WorkplaceId" asp-items="@Model.WorkPlaceList">
+                                    <option value="">Çalışma Yeri Seçiniz</option>
+                                </select>
+                                <span asp-validation-for="WorkplaceId" class="text-danger"></span>
+                            </div>
+                            <div class="col-sm-2">
+                                <a asp-action="CreatePersonWorkPlace" asp-controller="HumanResource" type="button" class="btn btn-success px-2">
+                                    <i class="fas fa-plus" style="font-size:14px;"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <label asp-for="EntryDate" class="col-sm-2 col-form-label">İşe Giriş Tarihi:</label>
+                            <div class="col-sm-10">
+                                <input asp-for="EntryDate" type="date" class="form-control" id="inputText">
+                                <span asp-validation-for="EntryDate" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label asp-for="Salary" class="col-sm-2 col-form-label">Maaş:</label>
+                            <div class="col-sm-10">
+                                <input asp-for="Salary" type="text" class="form-control" id="inputText">
+                                <span asp-validation-for="Salary" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            
+                                <label asp-for="IBAN" class="col-sm-2 col-form-label">IBAN:</label>
+                                <div class="col-sm-10">
+                                    <input asp-for="IBAN" type="text" class="form-control" id="ibanInput" maxlength="26" placeholder="TR">
+                                    <span asp-validation-for="IBAN" class="text-danger"></span>
+                                </div>
+                            
+                        </div>
+                        <div class="row mb-3">
+                            <label asp-for="Birthdate" class="col-sm-2 col-form-label">Doğum Tarihi:</label>
+                            <div class="col-sm-10">
+                                <input asp-for="Birthdate" type="date" class="form-control" id="dogumTarihi">
+                                <span asp-validation-for="Birthdate" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+                <div class="col-lg-6">
+                    <fieldset>
+                        <div class="row mb-3">
+                            <label asp-for="WorkingTime" class="col-sm-2 col-form-label">Aylık Çalışma Saati</label>
+                            <div class="col-sm-10">
+                                <input asp-for="WorkingTime"  class="form-control">
+                                <span asp-validation-for="WorkingTime" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label asp-for="MesaiCarpan" class="col-sm-2 col-form-label">Mesai Çarpanı</label>
+                            <div class="col-sm-10">
+                                <input asp-for="MesaiCarpan"  class="form-control">
+                                <span asp-validation-for="MesaiCarpan" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <legend>Belgeler</legend>
+                        <div class="row mb-3">
+                            <label asp-for="IdCard" class="col-sm-2 col-form-label">Kimlik</label>
+                            <div class="col-sm-10">
+                                <input asp-for="IdCard" type="file" class="form-control">
+                                <span asp-validation-for="IdCard" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label asp-for="PlaceOfResidence" class="col-sm-2 col-form-label">İkametgah</label>
+                            <div class="col-sm-10">
+                                <input asp-for="PlaceOfResidence" type="file" class="form-control">
+                                <span asp-validation-for="PlaceOfResidence" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label asp-for="Diploma" class="col-sm-2 col-form-label">Diploma</label>
+                            <div class="col-sm-10">
+                                <input asp-for="Diploma" type="file" class="form-control">
+                                <span asp-validation-for="Diploma" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label asp-for="CriminalRecord" class="col-sm-2 col-form-label">Adli Sicil Kaydı</label>
+                            <div class="col-sm-10">
+                                <input asp-for="CriminalRecord" type="file" class="form-control">
+                                <span asp-validation-for="CriminalRecord" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label asp-for="PopulationRegistration" class="col-sm-2 col-form-label">Nüfus Kaydı</label>
+                            <div class="col-sm-10">
+                                <input asp-for="PopulationRegistration" type="file" class="form-control">
+                                <span asp-validation-for="PopulationRegistration" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label asp-for="HealthReport" class="col-sm-2 col-form-label">Sağlık Raporu</label>
+                            <div class="col-sm-10">
+                                <input asp-for="HealthReport" type="file" class="form-control">
+                                <span asp-validation-for="HealthReport" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+            </div>
+            <div class="text-center">
+                <button type="submit" onclick="kontrolEt()" class="btn btn-success px-4">
+                    <i class="fas fa-save" style="font-size:20px"></i>
+                </button>
+                @*<button type="submit" class="btn btn-primary" onclick="kontrolEt()">Kaydet</button>*@
+                <button type="reset" class="btn btn-danger px-4">
+                    <i class="fas fa-trash" style="font-size:20px"></i>
+                </button>
+                @* <button type="reset" class="btn btn-danger">Temizle</button>*@
+            </div>
+        </form>
+
+    </div>
+</div>
+<h1 class="text-center" style="margin:20px; color:midnightblue">Personel Ekle</h1>
+
+<div class="card">
+    <div class="card-body">
+        <h1 class="card-title">Toplu Personel</h1>
+        <form action="/uploadExcelPerson" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="excelFile">Excel Dosyası Yükleyin:</label>
+                <input type="file" class="form-control" id="excelFile" name="excelFile" accept=".xlsx, .xls">
+            </div>
+            <button type="submit" class="btn btn-primary">Yükle</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+
+            var positionSelect = $("#positionSelect");
+            var workPlaceSelect = $("#workPlaceSelect");
+        })
+        function kontrolEt() {
+            var dogumTarihiInput = document.getElementById("dogumTarihi");
+            var dogumTarihi = new Date(dogumTarihiInput.value);
+            var simdikiTarih = new Date();
+            var yas = simdikiTarih.getFullYear() - dogumTarihi.getFullYear();
+
+            if (yas < 18) {
+                alert("Yaşınız 18'den küçük olmamalıdır. Kayıt işlemi başarısız!");
+            }
+        }
+    </script>
+
+    <script>document.getElementById("profilePictureInput").addEventListener("change", function (event) {
+            var input = event.target;
+            var reader = new FileReader();
+
+            reader.onload = function () {
+                var dataURL = reader.result;
+                var output = document.getElementById("profilePicturePreview");
+                output.src = dataURL;
+                output.style.display = "block";  // Resmi göster
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        });</script>
+
+    <script>$(document).ready(function () {
+            var ibanInput = $("#ibanInput");
+
+            // TR sabit başlangıç
+            ibanInput.val("TR");
+
+            // Kullanıcının sadece rakam girmesine izin ver ve maksimum 24 rakamı kontrol et
+            ibanInput.on("keypress", function (e) {
+                var charCode = (e.which) ? e.which : e.keyCode;
+
+                // Yalnızca rakamlar kabul edilir
+                if (charCode < 48 || charCode > 57) {
+                    e.preventDefault();
+                }
+
+                // Maksimum 24 rakam + TR için toplam 26 karakter sınırı
+                var currentLength = $(this).val().length;
+                if (currentLength >= 26) {
+                    e.preventDefault();
+                }
+            });
+
+            // TR'yi sabit tutmak için input değişikliklerini kontrol et
+            ibanInput.on("input", function () {
+                var value = $(this).val().replace(/\s+/g, ''); // Boşlukları kaldır
+                if (!value.startsWith("TR")) {
+                    value = "TR" + value.slice(2);
+                }
+                $(this).val(value);
+            });
+        });</script>
+}

@@ -1,0 +1,188 @@
+﻿@using HrProject.Domain.Entities;
+@using HrProject.Presentation.ViewModels;
+@model PersonelDocumentViewModel
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+
+<style>
+    .fas {
+        font-size: 30px;
+        color: #92968f; /* İkon rengini yeşil olarak ayarla */
+        margin-right: 20px;
+    }
+
+    .btn i {
+        color: inherit; /* Orijinal renk değerini koru */
+    }
+
+    .custom-radio {
+        transform: scale(1.5); /* Büyüklüğü ayarlayabilirsiniz */
+        margin-right: 10px; /* İhtiyaca göre ayarlayabilirsiniz */
+    }
+</style>
+
+<h2>Personel Belge Girişi</h2>
+<div class="card">
+    <div class="card-body">
+        
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+        }
+
+        <form asp-action="AddPersonel" asp-controller="PersonelDocument" method="post">
+            <div class="row">
+                <div class="col-lg-9">
+                    <div class="row my-3">
+                        <label asp-for="PersonId" class="col-sm-3 col-form-label"> Personel Bilgileri             
+                        </label>
+                        <div class="col-sm-8">
+                            <select class="selectpicker stockSelect" sayi="0" asp-for="PersonId" aria-label="Personel Seçiniz" data-live-search="true">
+                                <option value="">Seçiniz</option>
+                                @foreach (var per in ViewBag.Personals)
+                                {
+                                    <option value="@per.Id">@per.Name - @per.Surname </option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+                    
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group my-3">
+                        <button type="submit" class="btn btn-success me-3 px-3" style="font-size: 25px;"> <i class="fas fa-save"></i> </button>
+                        <a asp-controller="PersonelDocument" asp-action="GetPerDocument" class="btn btn-warning px-3" style="font-size: 25px;"><i class="fas fa-arrow-left"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-9">
+                    <table id="myTable" class="table">
+                        <thead>
+                            <tr>
+                                
+                                <th scope="col" class="col-sm-2" style="font-weight: bold;">Belge Kodu</th>
+                                <th scope="col" class="col-sm-2" style="font-weight: bold;">İmzalama Tarihi</th>
+                                <th scope="col" class="col-sm-2" style="font-weight: bold;">İmzalanan Belge</th>
+                                <th scope="col" class="col-sm-1" style="font-weight: bold;"> <a class="btn btn-success add-row"><i class="fas fa-plus mx-auto" style=" font-size: 20px;"> </i></a> </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                
+                                <td class="col-sm-2">
+                                    <select sayi="0" asp-for="PersAddDocs[0].PersonelDocumentId" asp-items="@(new SelectList(ViewBag.PersonelDocuments, "Id", "DocumentCode"))" class="form-control unitSelect">
+                                        <option value="Seçiniz"></option>
+                                    </select>
+                                </td>
+                                
+                                <td class="col-sm-2">
+                                    <input type="date" sayi="0" asp-for="PersAddDocs[0].SigningDate" id="quantitySelect" class="form-control quantitySelect">
+                                </td>
+                            
+
+                                <td class="col-sm-2">
+                                    <input type="file" sayi="0" asp-for="PersAddDocs[0].SigningDocument" id="quantitySelect" class="form-control calorieSelect">
+                                </td>
+
+                                <td class="col-sm-1">
+                                    <a class="btn btn-danger delete-row"><i class="fas fa-trash mx-auto" style=" font-size: 15px;"></i></a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<div>
+    @* <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+            crossorigin="anonymous"></script>
+ *@
+</div>
+<div class="modal fade" id="changeModal" tabindex="-1" role="dialog" aria-labelledby="changeModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changeModalLabel">Ekle</h5>
+                <button type="button" class="btn btn-outline-danger" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="scrollable-content">
+                <div id="modalbody" class="modal-body">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script>
+        $(document).ready(function () {
+
+            // Satır eklemek için
+            $(".add-row").click(function () {
+                var lastRow = $("#myTable tbody tr:last");
+                var newRow = lastRow.clone();
+
+                // Update values for new row
+                newRow.find('.unitSelect').val('');
+                newRow.find('.quantitySelect').val('');
+                newRow.find('.calorieSelect').val('');
+
+                // Update names for new row
+                var lastUnitName = lastRow.find('.unitSelect').attr('name');
+                var lastQuantityName = lastRow.find('.quantitySelect').attr('name');
+                var lastCalorieName = lastRow.find('.calorieSelect').attr('name');
+
+                if (lastUnitName) {
+                    lastUnitId = parseInt(lastUnitName.match(/\d+/)[0]);
+                }
+                if (lastQuantityName) {
+                    lastQuantityId = parseInt(lastQuantityName.match(/\d+/)[0]);
+                }
+                if (lastCalorieName) {
+                    lastCalorieId = parseInt(lastCalorieName.match(/\d+/)[0]);
+                }
+
+                var newUnitId = lastUnitId + 1;
+                var newQuantityId = lastQuantityId + 1;
+                var newCalorieId = lastCalorieId + 1;
+
+                // Update names and values for new row
+                newRow.find('.unitSelect').attr('name', 'PersAddDocs[' + newUnitId + '].PersonelDocumentId');
+                newRow.find('.quantitySelect').attr('name', 'PersAddDocs[' + newQuantityId + '].SigningDate');
+                newRow.find('.calorieSelect').attr('name', 'PersAddDocs[' + newCalorieId + '].SigningDocument');
+
+                // Append new row to the table
+                $("#myTable tbody").append(newRow);
+            });
+
+            // Satırı silmek için
+            $('tbody').on('click', '.delete-row', function () {
+                var rowCount = $(this).closest('table').find('tbody tr').length;
+
+                if (rowCount > 1) {
+                    $(this).closest('tr').remove();
+                } else {
+                    alert("Tabloda en az bir satır olmalı!");
+                }
+            });
+
+        });
+    </script>
+
+}

@@ -1,0 +1,1114 @@
+﻿@using HrProject.Domain.Enums
+@using HrProject.Presentation.ViewModels;
+@model PersonDetailViewModel
+
+@{
+    ViewData["Title"] = "PersonelDetail";
+}
+<style>
+
+    .form-control-readonly {
+        border: none;
+        background-color: transparent;
+        padding: 0;
+    }
+
+        .form-control-readonly:focus {
+            border: none;
+            outline: none;
+            background-color: transparent;
+        }
+
+    #btnDuzenle {
+        padding: 4px 15px;
+        margin-top: 20px;
+        height: 35px;
+        font-size: 15px; /* Yazı boyutu */
+    }
+
+    #btnKaydet {
+        padding: 4px 15px;
+        margin-top: 20px;
+        height: 35px;
+        font-size: 15px;
+        display: none;
+    }
+
+    .tab-pane {
+        background-color: #f5f5f5;
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        margin: 10px;
+    }
+
+        .tab-pane h4 {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .tab-pane ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .tab-pane li {
+            margin-bottom: 15px;
+        }
+
+        .tab-pane strong {
+            color: #007BFF;
+        }
+
+        .tab-pane a {
+            color: #007BFF;
+            margin-left: 10px;
+        }
+
+
+
+        .tab-pane span {
+            color: #888;
+        }
+
+    #form-id input[type="file"] {
+        display: none; /* Görünürlüğü kapat */
+        /* Diğer stil özelliklerini ekleyebilirsiniz */
+    }
+
+    .text-right .btn {
+        background-color: #007BFF;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+        .text-right .btn:hover {
+            background-color: #0056b3;
+            color: #fff;
+        }
+
+    #nameBar {
+        margin-bottom: 1px;
+    }
+
+    .profile-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .profile-image-buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        margin-top: 20px;
+    }
+
+        .profile-image-buttons img {
+            width: 200px;
+            height: auto;
+            margin-left: 20px;
+            border: 2px solid #191970;
+            padding: 5px;
+        }
+
+
+    .profile-image-buttons {
+        align-items: center;
+        margin-left: 0;
+        margin-top: 10px;
+    }
+
+        .profile-image-buttons img {
+            margin-left: 0;
+        }
+    
+</style>
+
+<div class="container">
+    <div class="col-md-12">
+        <div class="panel with-nav-tabs panel-info">
+            <div class="panel-heading">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#tab1info" data-toggle="tab">
+                            Genel Bilgiler
+                        </a>
+                    </li>
+                    <li><a href="#tab2info" data-toggle="tab">Belgeler</a></li>
+                    <li><a href="#tab3info" data-toggle="tab">İzin İşlemleri</a></li>
+                    <li><a href="#tab7info" data-toggle="tab">İSG Hataları</a></li>
+                    <li class="dropdown">
+                        <a href="#" data-toggle="dropdown">Finans İşlemleri <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#tab4info" data-toggle="tab">İkramiye Bilgileri</a></li>
+                            <li><a href="#tab5info" data-toggle="tab">Avans Bilgileri</a></li>
+                            <li><a href="#tab6info" data-toggle="tab">Maaş Bilgileri</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a class="btn btn-info" data-toggle="modal" data-target="#IstenCikarModal">
+                            <i class="fas fa-pencil-alt"></i> İsten Çıkar
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <form id="form-id" method="post" enctype="multipart/form-data" asp-action="PersonUpdate" asp-controller="HumanResource">
+                <input asp-for="Person.Id" type="hidden" />
+                <input asp-for="PostType" value="@PostType.Document" type="hidden" />
+                <div class="profile-container">
+                    <!-- Sola dayalı isim -->
+                    <h3 id="nameBar" style="color:#191970; margin: 0;">
+                        @Model.Person.Name.ToUpper() @Model.Person.Surname.ToUpper()
+                    </h3>
+
+                    <!-- Sağdaki resim ve butonlar -->
+                    <div class="profile-image-buttons">
+                        <img id="profileImage" src="~/HR/@Model.Person.ProfilePicture" alt="Kişinin Resmi" />
+
+                        <!-- Resim güncelleme input -->
+                        <input asp-for="PersonCreateVM.ProfilePicture" type="file" class="form-control resim-input" style="display: none;" onchange="previewImage(event)">
+
+                        <!-- Resim Güncelle Butonu -->
+                        <button type="button" class="btn btn-primary mt-2" onclick="resimGuncelle()">Resim Güncelle</button>
+
+                        <!-- Kaydet Butonu -->
+                        <button type="submit" class="btn btn-success px-4 mt-2" style="display: none;" id="btnKaydetResim"><i class="fas fa-save"></i> Kaydet</button>
+                    </div>
+                </div>
+            </form>
+
+            <div class="panel-body" style="padding: 0;">
+                <div class="tab-content">
+                    @*Genel Bilgiler*@
+                    <div class="tab-pane fade in active" id="tab1info">
+                        <form method="post" asp-action="PersonUpdate" asp-controller="HumanResource">
+                            <div class="d-flex justify-content-between mt-2">
+                                <div>
+                                    <h2 class="person-info-heading">Personel Bilgileri</h2>
+                                </div>
+                                <div>
+                                    <button type="submit" class="btn btn-success px-4" style="display: none;" id="btnKaydet"><i class="fas fa-save"></i></button>
+                                    <a id="btnDuzenle" onclick="btnGenelDuzenle()" class="btn btn-info"><i class="fas fa-pencil-alt"></i></a>
+                                </div>
+                            </div>
+
+                            <input asp-for="Person.Id" type="hidden" />
+                            <input asp-for="Person.IdCard" type="hidden" />
+                            <input asp-for="Person.PlaceOfResidence" type="hidden" />
+                            <input asp-for="Person.Diploma" type="hidden" />
+                            <input asp-for="Person.CriminalRecord" type="hidden" />
+                            <input asp-for="Person.PopulationRegistration" type="hidden" />
+                            <input asp-for="Person.HealthReport" type="hidden" />
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            <strong>TC Kimlik No:</strong>
+                                            <input type="text" readonly asp-for="Person.TcNo" class="form-control">
+                                        </li>
+                                        <li class="list-group-item">
+                                            <strong>Ad:</strong>
+                                            <input type="text" readonly asp-for="Person.Name" class="form-control">
+                                        </li>
+                                        <li class="list-group-item">
+                                            <strong>Soyad:</strong>
+                                            <input type="text" readonly asp-for="Person.Surname" class="form-control">
+                                        </li>
+                                        <li class="list-group-item">
+                                            <strong>Telefon Numarası:</strong>
+                                            <input type="text" readonly asp-for="Person.PhoneNumber" class="form-control">
+                                        </li>
+                                        <li class="list-group-item">
+                                            <strong>Doğum Tarihi:</strong>
+                                            <input type="date" readonly asp-for="Person.Birthdate" class="form-control">
+                                        </li>
+                                        <li class="list-group-item">
+                                            <strong>IBAN:</strong>
+                                            <input type="text" readonly asp-for="Person.IBAN" class="form-control">
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            <strong>İşe Giriş Tarihi:</strong>
+                                            <input type="date" readonly asp-for="Person.EntryDate" class="form-control">
+                                        </li>
+                                        @if (Model.Person.ExitDate.HasValue)
+                                        {
+                                            <li class="list-group-item">
+                                                <strong>İşten Çıkış Tarihi:</strong>
+                                                <input type="date" readonly asp-for="Person.ExitDate" class="form-control">
+                                            </li>
+                                        }
+                                        <li class="list-group-item">
+                                            <strong>Maaş:</strong>
+                                            <input type="text" readonly asp-for="PersonSalary.Salary" class="form-control" id="maasInput">
+                                        </li>
+
+                                        @if (Model.Person.PersonPosition != null)
+                                        {
+                                            <li class="list-group-item">
+                                                <strong>Pozisyon:</strong>
+                                                <select asp-items="ViewBag.Positions" type="text" disabled="true" asp-for="Person.PersonPositionId" class="form-control">
+                                                </select>
+                                            </li>
+                                        }
+                                        @if (Model.Person.Workplace != null)
+                                        {
+                                            <li class="list-group-item">
+                                                <strong>Çalışma Yeri:</strong>
+                                                <select asp-items="ViewBag.WorkPlaces" type="text" disabled="true" asp-for="Person.WorkplaceId" class="form-control">
+                                                </select>
+                                            </li>
+                                        }
+                                        <li class="list-group-item">
+                                            <strong>Çalışması Gereken Saat(Aylık)</strong>
+                                            <input type="text" readonly asp-for="Person.WorkingTime" class="form-control" id="wktime">
+                                        </li>
+                                        <li class="list-group-item">
+                                            <strong>Mesai Çarpanı:</strong>
+                                            <input type="text" readonly asp-for="Person.MesaiCarpan" class="form-control" id="mcarpan">
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    @*Belgeler*@
+                    <div class="tab-pane fade" id="tab2info">
+                        <form id="form-id" method="post" enctype="multipart/form-data" asp-action="PersonUpdate" asp-controller="HumanResource">
+                            <input asp-for="Person.Id" type="hidden" />
+                            <input asp-for="PostType" value="@PostType.Document" type="hidden" />
+                            <div class="d-flex justify-content-between mt-2">
+                                <div>
+                                    <h4 class="person-info-heading">Personel Belgeleri</h4>
+                                </div>
+                                <div>
+                                    <a id="btnDuzenleBelge" class="btn btn-info" onclick="btnAc()"><i class="fas fa-pencil-alt"></i></a>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            <strong>Nüfus Cüzdanı:</strong>
+                                            @if (!string.IsNullOrEmpty(Model.Person.IdCard))
+                                            {
+                                                <a href="~/HR/@Model.Person.IdCard" download="IdCard"> <i class="fas fa-download"></i></a>
+
+                                            }
+                                            else
+                                            {
+                                                <span>Belge yok</span>
+                                            }
+                                            <input asp-for="PersonCreateVM.IdCard" type="file" class="form-control belge-input">
+                                        </li>
+                                        <li class="list-group-item">
+                                            <strong>İkametgah Belgesi:</strong>
+                                            @if (!string.IsNullOrEmpty(Model.Person.PlaceOfResidence))
+                                            {
+                                                <a href="~/HR/@Model.Person.PlaceOfResidence" download="PlaceOfResidence"> <i class="fas fa-download"></i></a>
+
+                                            }
+                                            else
+                                            {
+                                                <span>Belge yok</span>
+                                            }
+                                            <input asp-for="PersonCreateVM.PlaceOfResidence" type="file" class="form-control belge-input">
+                                        </li>
+                                        <li class="list-group-item">
+                                            <strong>Diploma:</strong>
+                                            @if (!string.IsNullOrEmpty(Model.Person.Diploma))
+                                            {
+                                                <a href="~/HR/@Model.Person.Diploma" download="Diploma"> <i class="fas fa-download"></i></a>
+
+                                            }
+                                            else
+                                            {
+                                                <span>Belge yok</span>
+                                            }
+                                            <input asp-for="PersonCreateVM.Diploma" type="file" class="form-control belge-input">
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul>
+                                        <li class="list-group-item">
+                                            <strong>Sabıka Kaydı:</strong>
+                                            @if (!string.IsNullOrEmpty(Model.Person.CriminalRecord))
+                                            {
+                                                <a href="~/HR/@Model.Person.CriminalRecord" download="CriminalRecord"> <i class="fas fa-download"></i></a>
+
+                                            }
+                                            else
+                                            {
+                                                <span>Belge yok</span>
+                                            }
+                                            <input asp-for="PersonCreateVM.CriminalRecord" type="file" class="form-control belge-input">
+                                        </li>
+                                        <li class="list-group-item">
+                                            <strong>Nüfus Kaydı:</strong>
+                                            @if (!string.IsNullOrEmpty(Model.Person.PopulationRegistration))
+                                            {
+                                                <a href="~/HR/@Model.Person.PopulationRegistration" download="PopulationRegistration"> <i class="fas fa-download"></i></a>
+
+                                            }
+                                            else
+                                            {
+                                                <span>Belge yok</span>
+                                            }
+                                            <input asp-for="PersonCreateVM.PopulationRegistration" type="file" class="form-control belge-input">
+                                        </li>
+                                        <li class="list-group-item">
+                                            <strong>Sağlık Raporu:</strong>
+                                            @if (!string.IsNullOrEmpty(Model.Person.HealthReport))
+                                            {
+                                                <a href="~/HR/@Model.Person.HealthReport" download="HealthReport"> <i class="fas fa-download"></i></a>
+
+                                            }
+                                            else
+                                            {
+                                                <span>Belge yok</span>
+                                            }
+                                            <input asp-for="PersonCreateVM.HealthReport" type="file" class="form-control belge-input">
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-success px-4" style="display: none;" id="btnKaydetBelge"><i class="fas fa-save"></i></button>
+                            </div>
+                        </form>
+
+                    </div>
+                    @*İzin*@
+                <div class="tab-pane fade" id="tab3info">
+                    <div class="d-flex justify-content-between mt-2">
+                        <div>
+                            <h4 class="person-info-heading">Personel İzinleri</h4>
+                        </div>
+                        <div>
+                            <a class="btn btn-info" data-toggle="modal" data-target="#izinModal"><i class="fas fa-pencil-alt">İzin İşle</i></a>
+                            <a class="btn btn-info" data-toggle="modal" data-target="#yillikIzinModal"><i class="fas fa-pencil-alt">Yıllık İzin İşle</i></a>
+                        </div>
+                    </div>
+                    <div class="table-responsive" id="tab3info">
+                            <table id="example" class="table table-hover custom-table" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>İzin Türü</th>
+                                        <th>Başlangıç Tarihi</th>
+                                        <th>Bitiş Tarihi</th>
+                                        <th>Kullanılan Gün</th>
+                                        <th>Dosya</th>
+                                        <th>Açıklama</th>
+                                        <th>Ücretli Mi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.PersonAnnualLeaves != null)
+                                    {
+                                        foreach (var item in Model.PersonAnnualLeaves.OrderByDescending(x => x.StartDate))
+                                        {
+                                            <tr>
+                                                <td>Yıllık İzin </td>
+                                                <td>@item.StartDate</td>
+                                                <td>@item.FinishDate</td>
+                                                <td>@item.UsedDay Gün</td>
+                                                <td> <span>Dosya Yok</span></td>
+                                                <td>@item.Description</td>
+                                                <td></td>
+                                            </tr>
+                                        }
+                                    }
+                                    @foreach (var permission in Model.PersonPermissions.OrderByDescending(x => x.StartDate))
+                                    {
+                                        <tr>
+                                            <td>@permission.PersonPermissionType?.Name </td>
+                                            <td>@permission.StartDate</td>
+                                            <td>@permission.FinishDate</td>
+                                            <td>@permission.PersonPermissionType.NumberOfDays Gün</td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(permission.File))
+                                                {
+                                                    <a href="~/PersonPermission/@permission.File" download="Belge">
+                                                        <i class="fas fa-download"></i>
+                                                    </a>
+                                                }
+                                                else
+                                                {
+                                                    <span>Dosya Yok</span>
+                                                }
+                                            </td>
+
+                                            <td>@permission.Description</td>
+                                            <td>
+                                                @(permission.PersonPermissionType.IsPaid ? "Evet" : "Hayır")
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                            <!-- Yıllık İzin Modalı -->
+                            <div class="modal" id="yillikIzinModal" tabindex="-1" role="dialog" aria-labelledby="yillikIzinModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="yillikIzinModalLabel">İzin Verme İşlemi</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">İzin Bilgileri</h5>
+                                                    <div class="row">
+                                                        <div class="col">
+                                                            <p><strong>Toplam İzin Hakkı:</strong> @ViewBag.TotalPermission Gün</p>
+                                                        </div>
+                                                        <div class="col">
+                                                            <p><strong>Kullanılan İzin:</strong> @ViewBag.UsedDay gün</p>
+                                                        </div>
+                                                        <div class="col">
+                                                            <p><strong>Kalan İzin:</strong> @(ViewBag.TotalPermission - ViewBag.UsedDay) gün</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Yıllık İzin verme formu -->
+                                            <form id="yillikİzinForm" method="post" asp-action="AddPersonAnnualLeave" asp-controller="HumanResource">
+                                                <input type="hidden" asp-for="PersonAnnualLeave.PersonId" value="@Model.Person.Id" />
+                                                <div class="form-group mt-3">
+                                                    <label for="startDate">Başlangıç Tarihi ve Saati</label>
+                                                    <input type="datetime-local" class="form-control" id="startDate" asp-for="PersonAnnualLeave.StartDate" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="finishDate">Bitiş Tarihi ve Saati</label>
+                                                    <input type="datetime-local" class="form-control" id="finishDate" asp-for="PersonAnnualLeave.FinishDate" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="day">Kullanılacak Gün</label>
+                                                    <input type="number" class="form-control" id="day" asp-for="PersonAnnualLeave.UsedDay" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="returnDate">Dönüş Tarihi</label>
+                                                    <input type="datetime-local" class="form-control" id="returnDate" asp-for="PersonAnnualLeave.ReturnDate" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="description">Açıklama</label>
+                                                    <textarea class="form-control" id="description" asp-for="PersonAnnualLeave.Description"></textarea>
+                                                </div>
+
+                                                <button type="submit" class="btn btn-primary">İzin Ver</button>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- İzin Modalı -->
+                            <div class="modal" id="izinModal" tabindex="-1" role="dialog" aria-labelledby="izinModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="izinModalLabel">İzin Verme İşlemi</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- İzin verme formu -->
+                                            <form id="izinForm" method="post" asp-action="CreatePermission" asp-controller="HumanResource" enctype="multipart/form-data">
+                                                <input type="hidden" asp-for="PersonPermission.PersonId" value="@Model.Person.Id" />
+                                                <div class="form-group">
+                                                    <label for="permissionTypeId">İzin Türü</label>
+                                                    <div class="d-flex">
+                                                        <select class="form-control" id="permissionTypeId" asp-for="PersonPermission.PersonPermissionTypeId" asp-items="@(new SelectList(Model.PersonPermissionTypes, "Id", "Name"))">
+                                                            <option value="">Seçiniz</option>
+                                                        </select>
+                                                        <a type="button" class="btn btn-outline-success ms-2" asp-action="CreatePermissionType">
+                                                            <i class="fas fa-plus"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="startDate">Başlangıç Tarihi ve Saati</label>
+                                                    <input type="datetime-local" class="form-control" id="startDate" asp-for="PersonPermission.StartDate" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="finishDate">Bitiş Tarihi ve Saati</label>
+                                                    <input type="datetime-local" class="form-control" id="finishDate" asp-for="PersonPermission.FinishDate" required>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="file">Dosya</label>
+                                                    <input asp-for="PersonPermissionFile" class="form-control" id="file">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="description">Açıklama</label>
+                                                    <textarea class="form-control" id="description" asp-for="PersonPermission.Description"></textarea>
+                                                </div>
+
+                                                <button type="submit" class="btn btn-primary">İzin Ver</button>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                    @*ISG Hatalari*@
+                    <div class="tab-pane fade" id="tab7info">
+                        <div class="d-flex justify-content-between mt-2">
+                            <div>
+                                <h4 class="person-info-heading">İSG Hataları</h4>
+                            </div>
+                        </div>
+                        <div class="table-responsive" id="tab7info">
+                            <table id="isgTable" class="table table-hover custom-table" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Açıklama</th>
+                                        <th>Kategori</th>
+                                        <th>Alt Kategori</th>
+                                        <th>Risk Seviyesi</th>
+                                        <th>Bildiren Kullanıcı</th>
+                                        <th>Rapor Tarihi</th>
+                                        <th>Resimler</th>
+                                        <th>İşlemler</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var issue in Model.Issues)
+                                    {
+                                        <tr data-issue-id="@issue.Id">
+                                            <td>@issue.Description</td>
+                                            <td>@(issue.Category?.Name ?? "Kategori Yok")</td>
+                                            <td>@(issue.SubCategory?.Name ?? "Alt Kategori Yok")</td>
+                                            <td>
+                                                @(issue.RiskLevel == ISGRiskLevel.DusukRiskli ? "Düşük" : issue.RiskLevel == ISGRiskLevel.OrtaRiskli ? "Orta" : "Yüksek")
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(issue.ReportedById) && ViewBag.UserNames.ContainsKey(issue.ReportedById))
+                                                {
+                                                    @ViewBag.UserNames[issue.ReportedById]
+                                                }
+                                                else
+                                                {
+                                                    <span>Kullanıcı Bilgisi Yok</span>
+                                                }
+                                            </td>
+                                            <td>@issue.ReportDate.ToString("dd.MM.yyyy")</td>
+                                            <td>
+                                                @if (issue.Images != null && issue.Images.Any())
+                                                {
+                                                    foreach (var img in issue.Images)
+                                                    {
+                                                        <a href="~/SafetyIssueImages/@img.ImagePath" data-fancybox="gallery-@issue.Id" data-caption="@issue.Description">
+                                                            <img src="~/SafetyIssueImages/@img.ImagePath" alt="Resim" style="width: 50px; height: 50px;" />
+                                                        </a>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <span>Resim Yok</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-warning" asp-action="Edit" asp-controller="ISGSafetyIssue" asp-route-id="@issue.Id">Düzenle</a>
+                                                <form id="deleteForm-@issue.Id" asp-action="Delete" asp-controller="ISGSafetyIssue" asp-route-id="@issue.Id" method="post" style="display:inline;">
+                                                    <button type="submit" class="btn btn-danger">Sil</button>
+                                                </form>
+
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+
+
+                    @*Maaş*@
+                    <div class="tab-pane fade" id="tab6info">
+                        <div class="d-flex justify-content-between mt-2">
+                            <div>
+                                <h4 class="person-info-heading">Maaş Bilgileri</h4>
+                            </div>
+                            <div>
+                                <a class="btn btn-info" data-toggle="modal" data-target="#zamModal"><i class="fas fa-pencil-alt">Zam Yap</i></a>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Başlangıç Tarihi</th>
+                                        <th scope="col">Bitiş Tarihi</th>
+                                        <th scope="col">Maaş Miktarı</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.PersonSalaries.OrderByDescending(x => x.StartDate))
+                                    {
+                                        <tr>
+                                            <td>@item.StartDate.ToShortDateString()</td>
+                                            <td>
+                                                @if (@item.FinishDate == null)
+                                                {
+                                                    <p>Devam eden Maaş</p>
+                                                }
+                                                @item.FinishDate
+                                            </td>
+                                            <td>@item.Salary</td>
+                                            <td>
+                                                <button class="btn btn-danger px-4" onclick="deleteSalary(@item.Id)"> <i class="fas fa-trash" style="font-size:20px"></i></button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal fade" id="zamModal" tabindex="-1" role="dialog" aria-labelledby="zamModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="zamModalLabel">Zam Yap</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="zamForm" method="post" asp-action="UpdateSalary" asp-controller="HumanResource">
+                                            <input asp-for="Person.Id" type="hidden" />
+                                            <div class="form-group">
+                                                <label for="newSalary">Yeni Maaş Bilgisi</label>
+                                                <input type="" class="form-control" id="newSalary" asp-for="PersonSalary.Salary" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="startDate">Yeni Maaş Başlangıç Tarihi</label>
+                                                <input type="date" class="form-control" id="startDate" asp-for="PersonSalary.StartDate" required>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Kaydet</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*Bonus*@
+                    <div class="tab-pane fade" id="tab4info">
+                        <div class="d-flex justify-content-between mt-2">
+                            <div>
+                                <h4 class="person-info-heading">İkramiye Bilgileri</h4>
+                            </div>
+                            <div>
+                                <a class="btn btn-info" data-toggle="modal" data-target="#bonusModal"><i class="fas fa-pencil-alt">Bonus Ver</i></a>
+                            </div>
+                        </div>
+                        @*İkramiye Bilgileri*@
+                        <div class="mt-4">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Tarih</th>
+                                        <th>Miktar</th>
+                                        <th>Açıklama</th>
+                                        <th>Ödeme Bilgisi</th>
+                                        <th>Seç</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var bonus in Model.PersonBonuses.OrderBy(b => b.IsOkey))
+                                    {
+                                        <tr>
+                                            <td>@bonus.DateOfIssue.ToString("dd-MM-yyyy")</td>
+                                            <td>@bonus.BonusAmount TL</td>
+                                            <td>@bonus.Description</td>
+                                            <td style="background-color: @(bonus.IsOkey ? "green" : "red");">
+                                                <p style="font-weight: bold; color: white;">@(bonus.IsOkey ? "Ödendi" : "Ödeme Bekliyor")</p>
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" name="selectedBonuses" value="@bonus.Id" @(bonus.IsOkey ? "disabled" : "") />
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <input type="hidden" name="selectedBonuses" id="selectedBonuses" />
+                            <button class="btn btn-danger" type="button" onclick="processBonuses()">Seçilen Bonusları İşle</button>
+                        </div>
+
+                        <!-- Bonus Ver Modal -->
+                        <div class="modal fade" id="bonusModal" tabindex="-1" role="dialog" aria-labelledby="bonusModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="bonusModalLabel">Bonus Ver</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!-- Bonus Ver Formu -->
+                                        <form id="bonusForm" method="post" asp-action="AddPersonBonus" asp-controller="HumanResource">
+                                            <input asp-for="Person.Id" type="hidden" />
+                                            <div class="form-group">
+                                                <label for="tarih">Tarih:</label>
+                                                <input asp-for="PersonBonus.DateOfIssue" type="date" class="form-control" id="tarih" placeholder="YYYY-MM-DD" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="miktar">Miktar:</label>
+                                                <input asp-for="PersonBonus.BonusAmount" class="form-control" id="miktar" placeholder="Miktarı Girin" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="aciklama">Açıklama:</label>
+                                                <input asp-for="PersonBonus.Description" class="form-control" id="aciklama" rows="3" placeholder="Açıklama Girin" required>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Onayla</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*Avans*@
+                    <div class="tab-pane fade" id="tab5info">
+
+                        <div class="d-flex justify-content-between mt-2">
+                            <div>
+                                <h4 class="person-info-heading">Avans Bilgileri</h4>
+                            </div>
+                            <div>
+                                <a class="btn btn-info" data-toggle="modal" data-target="#avansModal"><i class="fas fa-pencil-alt">Avans Ver</i></a>
+                            </div>
+                        </div>
+                        @*Avans Bilgileri*@
+                        <div class="mt-4">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Tarih</th>
+                                        <th>Miktar</th>
+                                        <th>Açıklama</th>
+                                        <th>Ödeme Bilgisi</th>
+                                        <th>Seç</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var avans in Model.PersonAdvancePayments.OrderBy(b => b.IsOkey))
+                                    {
+                                        <tr>
+                                            <td>@avans.DateOfIssue.ToString("dd-MM-yyyy")</td>
+                                            <td>@avans.BonusAmount TL</td>
+                                            <td>@avans.Description </td>
+                                            <td style="background-color: @(avans.IsOkey ? "green" : "red");">
+                                                <p style="font-weight: bold; color: white;">@(avans.IsOkey ? "Ödendi" : "Ödeme Bekliyor")</p>
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" name="selectedAvans" value="@avans.Id" @(avans.IsOkey ? "disabled" : "") />
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <input type="hidden" name="selectedAvans" id="selectedAvans" />
+                            <button class="btn btn-danger" type="button" onclick="processAvans()">Seçilen Avansları İşle</button>
+                        </div>
+                        <!-- Avans Ver Modal -->
+                        <div class="modal fade" id="avansModal" tabindex="-1" role="dialog" aria-labelledby="avansModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="avansModalLabel">Avans Ver</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!-- Avans Ver Formu -->
+                                        <form id="avansForm" method="post" asp-action="AddPersonAvans" asp-controller="HumanResource">
+                                            <input asp-for="Person.Id" type="hidden" />
+                                            <div class="form-group">
+                                                <label for="tarih">Tarih:</label>
+                                                <input asp-for="PersonAdvancePayment.DateOfIssue" type="date" class="form-control" id="tarih" placeholder="YYYY-MM-DD" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="miktar">Miktar:</label>
+                                                <input asp-for="PersonAdvancePayment.BonusAmount" class="form-control" id="miktar" placeholder="Miktarı Girin" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="aciklama">Açıklama:</label>
+                                                <input asp-for="PersonAdvancePayment.Description" class="form-control" id="aciklama" rows="3" placeholder="Açıklama Girin" required>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Onayla</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- İsten Çıkarma Modalı -->
+                    <div class="modal" id="IstenCikarModal" tabindex="-1" role="dialog" aria-labelledby="IstenCikarModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="IstenCikarModalLabel">İsten Çıkarma İşlemi</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- İsten Çıkarma Formu -->
+                                    <form id="izinForm" method="post" asp-action="RemovePerson" asp-controller="HumanResource" enctype="multipart/form-data">
+                                        <input type="hidden" asp-for="PersonIstenCikar.PersonId" value="@Model.Person.Id" />
+
+                                        <div class="form-group">
+                                            <label for="finishDate">Bitiş Tarihi ve Saati</label>
+                                            <input type="datetime-local" class="form-control" id="finishDate" asp-for="PersonIstenCikar.RemoveDate">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="file">Dosya</label>
+                                            <input type="file" asp-for="IstenCikisDosya" class="form-control" id="file">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="description">Ihbar Tazminati</label>
+                                            <input type="number" class="form-control" id="severancePay" asp-for="PersonIstenCikar.IhbarTazminati" step="0.01">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="description">Kidem Tazminati</label>
+                                            <input type="number" class="form-control" id="severancePay" asp-for="PersonIstenCikar.KidemTazminati" step="0.01">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="description">Açıklama</label>
+                                            <textarea class="form-control" id="description" asp-for="PersonIstenCikar.Description"></textarea>
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary">İşten Çıkar</button>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                    <div class="text-right mt-2">
+                        <a class="btn btn-primary btn-lg" asp-action="AllPersonelsWithFilter">Listeye Dön</a>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+
+<!-- DataTables JavaScript -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+<!-- DataTables Buttons Extension -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css" />
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+@section Scripts {
+
+    <script>$(document).ready(function () {
+            $('form[id^="deleteForm"]').submit(function (e) {
+                e.preventDefault(); // Formun normal şekilde gönderilmesini engelle
+
+                var form = $(this); // Formu seç
+                var url = form.attr('action'); // Formun action URL'sini al
+                var formData = form.serialize(); // Form verilerini serileştir
+
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: formData,
+                    success: function (response) {
+                        if (response.success) {
+                            // Başarılı yanıt aldıysanız sayfayı yenileyin
+                            location.reload();
+                        } else {
+                            // Başarısız yanıt için uyarı
+                            alert('Bir hata oluştu.');
+                        }
+                    },
+                    error: function (error) {
+                        // AJAX isteği başarısız olursa
+                        console.error('Hata:', error);
+                        alert('Bir hata oluştu.');
+                    }
+                });
+            });
+        });</script>
+    <script>
+        $(document).ready(function () {
+            // Genel izin tablosu için DataTable entegrasyonu
+            $('#example').DataTable({
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/tr.json',
+                },
+                dom: 'Bfrtip',
+                buttons: [
+                    'copyHtml5',
+                    'excelHtml5',
+                    'csvHtml5',
+                    'pdfHtml5'
+                ]
+            });
+
+            // İSG Hataları tablosu için DataTable entegrasyonu
+            var isgTable;
+
+            // Tab gösterildiğinde DataTable'ı yeniden başlatma
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                var target = $(e.target).attr("href"); // Aktif olan tabın ID'sini al
+                if (target === "#tab4info" && !$.fn.DataTable.isDataTable('#isgTable')) {
+                    isgTable = $('#isgTable').DataTable({
+                        language: {
+                            url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/tr.json',
+                        },
+                        dom: 'Bfrtip',
+                        buttons: [
+                            'copyHtml5',
+                            'excelHtml5',
+                            'csvHtml5',
+                            'pdfHtml5'
+                        ]
+                    });
+                }
+            });
+
+            // Diğer fonksiyonlar
+            function btnGenelDuzenle() {
+                $("#btnKaydet").show();
+                $("input").prop("readonly", false);
+                $("#maasInput").prop("readonly", true);
+                $("select").prop("disabled", false);
+            }
+            
+            function btnAc() {
+                document.getElementById("btnKaydetBelge").style.display = "block";
+                var belgeInputList = document.querySelectorAll('.belge-input');
+                for (var i = 0; i < belgeInputList.length; i++) {
+                    belgeInputList[i].style.display = 'block';
+                }
+            }
+
+            function deleteSalary(salaryId) {
+                if (confirm("Maaşı silmek istediğinize emin misiniz?")) {
+                    var xhr = new XMLHttpRequest();
+                    var data = {
+                        salaryId: salaryId
+                    };
+
+                    xhr.open("POST", "/HumanResource/DeleteSalary?salaryId= " + salaryId, true);
+                    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+                    xhr.onload = function () {
+                        if (xhr.status == 200) {
+                            location.reload();
+                        } else {
+                            alert("Sadece geçmiş maaş silinebilir");
+                        }
+                    };
+
+                    xhr.send(JSON.stringify(data));
+                }
+            }
+
+            function processBonuses() {
+                // Seçilen avans id'lerini al
+                var selectedBonuses = $('input[name="selectedBonuses"]:checked').map(function () {
+                    return this.value;
+                }).get();
+                // AJAX ile istek at
+                $.ajax({
+                    url: '/HumanResource/UpdatePersonBonus',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(selectedBonuses),
+                    success: function (result) {
+                        window.location.reload();
+                    },
+                    error: function (error) {
+                        console.error('Hata:', error);
+                    }
+                });
+            }
+
+            function processAvans() {
+                // Seçilen avans id'lerini al
+                var selectedAvans = $('input[name="selectedAvans"]:checked').map(function () {
+                    return this.value;
+                }).get();
+                // AJAX ile istek at
+                $.ajax({
+                    url: '/HumanResource/UpdatePersonAvans',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(selectedAvans),
+                    success: function (result) {
+                        window.location.reload();
+                    },
+                    error: function (error) {
+                        console.error('Hata:', error);
+                    }
+                });
+            }
+
+            function resimGuncelle() {
+                // Resim güncelleme butonunu gizle
+                var resimGuncelleButon = document.querySelector('.btn-primary');
+                resimGuncelleButon.style.display = 'none';
+
+                // Kaydet butonunu ve dosya yükleme inputunu göster
+                document.getElementById("btnKaydetResim").style.display = "block";
+                var resimInputList = document.querySelectorAll('.resim-input');
+                for (var i = 0; i < resimInputList.length; i++) {
+                    resimInputList[i].style.display = 'block';
+                }
+            }
+
+            function previewImage(event) {
+                var reader = new FileReader();
+                reader.onload = function () {
+                    var output = document.getElementById('profileImage');
+                    output.src = reader.result;
+                };
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        });
+
+    </script>
+
+
+
+}

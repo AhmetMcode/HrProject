@@ -1,0 +1,142 @@
+using AutoMapper;
+using DinkToPdf.Contracts;
+using DinkToPdf;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using HrProject.ApplicaitonContracts.Interfaces;
+using HrProject.Application.Services;
+using HrProject.Domain.Entities;
+using HrProject.Presentation.Data;
+using HrProject.Repository.Base;
+using HrProject.Repository.Repositories;
+
+namespace HrProject.Presentation
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
+
+            // Add services to the container.
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(connectionString).UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddMvc();
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new Models.AutoMapperProfile());
+            });
+
+            IMapper mapper = mapperConfig.CreateMapper();
+            builder.Services.AddSingleton(mapper);
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "My MVC App", Version = "v1" });
+            });
+
+            #region ImplementServices
+            builder.Services.AddTransient<ICariKartService, CariKartService>();
+            builder.Services.AddTransient<ICityService, CityService>();
+            builder.Services.AddTransient<ITaxOfficeService, TaxOfficeService>();
+            builder.Services.AddTransient<ICariBankService, CariBankService>();
+            builder.Services.AddTransient<ICariRiskService, CariRiskService>();
+            builder.Services.AddTransient<IDistrictService, DistrictService>();
+            builder.Services.AddTransient<IInvoiceAdressService, InvoiceAdressService>();
+            builder.Services.AddTransient<IOtherCariRiskService, OtherCariRiskService>();
+            builder.Services.AddTransient<IOfferService, OfferService>();
+            builder.Services.AddTransient<ICurrentValueService, CurrentValueService>();
+            builder.Services.AddTransient<IProjectService, ProjectService>();
+            builder.Services.AddTransient<IProjectTypeService, ProjectTypeService>();
+            builder.Services.AddTransient<ICurrentValueService, CurrentValueService>();
+            builder.Services.AddTransient<ICurrentValueChangeService, CurrentValueChangeService>();
+            builder.Services.AddTransient<IUnitService, UnitService>();
+            builder.Services.AddTransient<INeighbourhoodService, NeighbourhoodService>();
+            builder.Services.AddTransient<IUserService, UserService>();
+            builder.Services.AddTransient<IOfferProcessService, OfferProcessService>();
+            builder.Services.AddTransient<IStockService, StockService>();
+            builder.Services.AddTransient<IStockCategoryService, StockCategoryService>();
+            builder.Services.AddTransient<IStockChangeService, StockChangeService>();
+            builder.Services.AddTransient<IStockChangeService, StockChangeService>();
+            builder.Services.AddTransient<IWareHouseService, WareHouseService>();
+            builder.Services.AddTransient<IPersonPositionService, PersonPositionService>();
+            builder.Services.AddTransient<IPersonService, PersonService>();
+            builder.Services.AddTransient<IPersonSalaryService, PersonSalaryService>();
+            builder.Services.AddTransient<IWorkPlaceService, WorkPlaceService>();
+            builder.Services.AddTransient<IPersonBonusService, PersonBonusService>();
+            builder.Services.AddTransient<IBuyingWithholdingRateService, BuyingWithholdingRateService>();
+            builder.Services.AddTransient<IBuyingWithholdingTypeService, BuyingWithholdingTypeService>();
+            builder.Services.AddTransient<IEDocumentBaseRateService, EDocumentBaseRateService>();
+            builder.Services.AddTransient<IPurchaseVatService, PurchaseVatService>();
+            builder.Services.AddTransient<ISaleVatService, SaleVatService>();
+            builder.Services.AddTransient<ISalesWithholdingRateService, SalesWithholdingRateService>();
+            builder.Services.AddTransient<ISalesWithholdingTypeService, SalesWithholdingTypeService>();
+            builder.Services.AddTransient<IPersonAdvancePaymentService, PersonAdvancePaymentService>();
+            builder.Services.AddTransient<IPersonPermissionService, PersonPermissionService>();
+            builder.Services.AddTransient<IPersonPermissionTypeService, PersonPermissionTypeService>();
+            builder.Services.AddTransient<IPersonAnnualLeaveService, PersonAnnualLeaveService>();
+            builder.Services.AddTransient<IPersonPermissionRuleService, PersonPermissionRuleService>();
+            builder.Services.AddTransient<IPersonPermissionTransferService, PersonPermissionTransferService>();
+            builder.Services.AddTransient<IPersonPermissionPaymentService, PersonPermissionPaymentService>();
+            builder.Services.AddTransient<IGoodsCodeService,GoodsCodeService>();
+            builder.Services.AddTransient<IFirstOfferService,FirstOfferService>();
+            builder.Services.AddTransient<ISubFirstOfferService,SubFirstOfferService>();
+
+            builder.Services.AddTransient<IDetailOfferService,DetailOfferService>();
+
+            builder.Services.AddTransient<IGoodsCodeService, GoodsCodeService>();
+            builder.Services.AddTransient<IFirstOfferService, FirstOfferService>();
+            builder.Services.AddTransient<ISubFirstOfferService, SubFirstOfferService>();
+            builder.Services.AddTransient<INotificationService, NotificationService>();
+            builder.Services.AddTransient<IOfferMessageService, OfferMessageService>();
+            builder.Services.AddTransient<IProjectElementTypeService, ProjectElementTypeService>();
+            builder.Services.AddTransient<IOfferCostCategory, OfferCostCategoryService>();
+            builder.Services.AddTransient<IOfferMaterials, OfferMaterialsService>();
+            builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+
+            // PdfService servisi
+            builder.Services.AddSingleton<PdfService>();
+
+            #endregion
+
+
+            builder.Services.AddControllersWithViews();
+            var app = builder.Build();
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseMigrationsEndPoint();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
+            app.UseRouting();
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My MVC App V1");
+            });
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapRazorPages();
+            });
+
+            app.Run();
+        }
+    }
+}

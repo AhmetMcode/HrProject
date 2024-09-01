@@ -1,0 +1,360 @@
+﻿@model List<MailViewModel>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="~/calendarScript/dist/css/adminlte.min.css">
+<!-- summernote -->
+<link rel="stylesheet" href="~/calendarScript/plugins/summernote/summernote-bs4.min.css">
+<div class="row">
+    <div class="col-md-3">
+        <a asp-action="NewEmail" class="btn btn-primary btn-block mb-3">Yeni Posta</a>
+        <div class="card-body">
+
+            <!-- Default Accordion -->
+
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Dosyalar</h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <ul class="nav nav-pills flex-column">
+                    <li class="nav-item active">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-inbox"></i> Gelen Kutusu
+                            <span class="badge bg-primary float-right">12</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a asp-action="WasSend" class="nav-link">
+                            <i class="far fa-envelope"></i> Gönderilenler
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="far fa-file-alt"></i> Taslaklar
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-filter"></i> Spam
+                            <span class="badge bg-warning float-right">65</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="far fa-trash-alt"></i> Silinenler
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Labels</h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <ul class="nav nav-pills flex-column">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="far fa-circle text-danger"></i>
+                            Önemli
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="far fa-circle text-warning"></i> Tanıtımlar
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="far fa-circle text-primary"></i>
+                            Sosyal
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+    <!-- /.col -->
+    <div class="col-md-9">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Inbox</h3>
+
+                <div class="card-tools">
+                    <div class="input-group input-group-sm">
+                        <input type="text" class="form-control" placeholder="Search Mail">
+                        <div class="input-group-append">
+                            <div class="btn btn-primary">
+                                <i class="fas fa-search"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.card-tools -->
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+                <div class="mailbox-controls">
+                    <!-- Check all button -->
+                    <button type="button" class="btn btn-default btn-sm checkbox-toggle">
+                        <i class="far fa-square"></i>
+                    </button>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-sm">
+                            <i class="far fa-trash-alt"></i>
+                        </button>
+                        <button type="button" class="btn btn-default btn-sm">
+                            <i class="fas fa-reply"></i>
+                        </button>
+                        <button type="button" class="btn btn-default btn-sm">
+                            <i class="fas fa-share"></i>
+                        </button>
+                    </div>
+                    <!-- /.btn-group -->
+                    <button type="button" class="btn btn-default btn-sm">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                    <div class="float-right">
+                        1-50/200
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default btn-sm">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button type="button" class="btn btn-default btn-sm">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <!-- /.btn-group -->
+                    </div>
+                    <!-- /.float-right -->
+                </div>
+                <div class="table-responsive mailbox-messages">
+                    <table class="table table-hover table-striped">
+                        <tbody>
+                            @foreach (var item in Model.ToList())
+                            {
+                                @if (item.IsRead)
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="icheck-primary">
+                                                <input type="checkbox" value="" id="check1">
+                                                <label for="check1"></label>
+                                            </div>
+                                        </td>
+                                        <td class="mailbox-star"><a href="#"><i class=" text-warning"></i></a></td>
+                                        <td class="mailbox-name"><a>@ProcessMailData(item.To)</a></td>
+                                        <td class="mailbox-subject">
+                                            @item.Subject
+                                        </td>
+                                        <td class="mailbox-attachment"></td>
+                                        <td class="mailbox-date">
+                                            @GetTimeDifference(item.Date)
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td>
+                                            <div class="icheck-primary">
+                                                <input type="checkbox" value="" id="check1">
+                                                <label for="check1"></label>
+                                                <i class=" ri-error-warning-line text-danger"></i>
+                                            </div>
+                                        </td>
+                                        <td class="mailbox-star"><a href="#"><i class=" text-warning"></i></a></td>
+                                        <td class="mailbox-name"><a style="font-weight:bold">@ProcessMailData(item.From)</a></td>
+                                        <td class="mailbox-subject" style="font-weight:bold">
+                                            @item.Subject
+                                        </td>
+                                        <td class="mailbox-attachment"></td>
+                                        <td class="mailbox-date">
+                                            @GetTimeDifference(item.Date)
+                                        </td>
+                                    </tr>
+                                }
+
+                            }
+
+
+                        </tbody>
+                    </table>
+                    <!-- /.table -->
+                </div>
+                <!-- /.mail-box-messages -->
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer p-0">
+                <div class="mailbox-controls">
+                    <!-- Check all button -->
+                    <button type="button" class="btn btn-default btn-sm checkbox-toggle">
+                        <i class="far fa-square"></i>
+                    </button>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-sm">
+                            <i class="far fa-trash-alt"></i>
+                        </button>
+                        <button type="button" class="btn btn-default btn-sm">
+                            <i class="fas fa-reply"></i>
+                        </button>
+                        <button type="button" class="btn btn-default btn-sm">
+                            <i class="fas fa-share"></i>
+                        </button>
+                    </div>
+                    <!-- /.btn-group -->
+                    <button type="button" class="btn btn-default btn-sm">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                    <div class="float-right">
+                        1-50/200
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default btn-sm">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button type="button" class="btn btn-default btn-sm">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                        <!-- /.btn-group -->
+                    </div>
+                    <!-- /.float-right -->
+                </div>
+            </div>
+        </div>
+        <!-- /.card -->
+    </div>
+    <!-- /.col -->
+</div>
+
+@functions {
+    public string ProcessMailData(string mailData)
+    {
+        // Her bir satırı dizi elemanına ayır
+        var satirlar = mailData.Split('\n');
+
+        // İşlenmiş veriyi tutacak bir StringBuilder oluştur
+        System.Text.StringBuilder resultBuilder = new System.Text.StringBuilder();
+
+        // Her bir satırı kontrol et
+        foreach (var satir in satirlar)
+        {
+            // Tırnak içinde bir değer varsa
+            var degerInsideQuotes = System.Text.RegularExpressions.Regex.Match(satir, "\"([^\"]+)\"");
+            if (degerInsideQuotes.Success)
+            {
+                // Tırnak içindeki değeri ekle
+                resultBuilder.AppendLine(degerInsideQuotes.Groups[1].Value);
+            }
+            else
+            {
+                // Tırnak içinde değer yoksa, orijinal satırı ekle
+                resultBuilder.AppendLine(satir);
+            }
+        }
+
+        // İşlenmiş veriyi string olarak döndür
+        return resultBuilder.ToString();
+    }
+
+    public string GetTimeDifference(DateTime emailDate)
+    {
+        TimeSpan timeDifference = DateTime.Now - emailDate;
+
+        if (timeDifference.TotalDays < 1)
+        {
+            if (timeDifference.TotalHours < 1)
+            {
+                if (timeDifference.TotalMinutes < 1)
+                {
+                    return "Henüz";
+                }
+                else
+                {
+                    return $"{(int)timeDifference.TotalMinutes} dakika önce";
+                }
+            }
+            else
+            {
+                return $"{(int)timeDifference.TotalHours} saat önce";
+            }
+        }
+        else if (timeDifference.TotalDays == 1)
+        {
+            return "Dün";
+        }
+        else
+        {
+            return emailDate.ToString("dd/MM/yyyy");
+        }
+    }
+}
+<script src="~/calendarScript/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="~/calendarScript/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- jQuery UI -->
+<script src="~/calendarScript/plugins/jquery-ui/jquery-ui.min.js"></script>
+<!-- AdminLTE App -->
+<script src="~/calendarScript/dist/js/adminlte.min.js"></script>
+<!-- fullCalendar 2.2.5 -->
+<script src="~/calendarScript/plugins/moment/moment.min.js"></script>
+<script src="~/calendarScript/plugins/fullcalendar/main.js"></script>
+
+<script src="~/calendarScript/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="~/calendarScript/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="~/calendarScript/dist/js/adminlte.min.js"></script>
+<!-- Summernote -->
+<script src="~/calendarScript/plugins/summernote/summernote-bs4.min.js"></script>
+<script>
+    $(function () {
+        //Enable check and uncheck all functionality
+        $('.checkbox-toggle').click(function () {
+            var clicks = $(this).data('clicks')
+            if (clicks) {
+                //Uncheck all checkboxes
+                $('.mailbox-messages input[type=\'checkbox\']').prop('checked', false)
+                $('.checkbox-toggle .far.fa-check-square').removeClass('fa-check-square').addClass('fa-square')
+            } else {
+                //Check all checkboxes
+                $('.mailbox-messages input[type=\'checkbox\']').prop('checked', true)
+                $('.checkbox-toggle .far.fa-square').removeClass('fa-square').addClass('fa-check-square')
+            }
+            $(this).data('clicks', !clicks)
+        })
+
+        //Handle starring for font awesome
+        $('.mailbox-star').click(function (e) {
+            e.preventDefault()
+            //detect type
+            var $this = $(this).find('a > i')
+            var fa = $this.hasClass('fa')
+
+            //Switch states
+            if (fa) {
+                $this.toggleClass('fa-star')
+                $this.toggleClass('fa-star-o')
+            }
+        })
+    })
+</script>

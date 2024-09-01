@@ -1,0 +1,12 @@
+/Users/mcodesoft/Desktop/MorfoErp-main/MorfoErp.Domain/bin/Release/net7.0/MorfoErp.Domain.deps.json
+/Users/mcodesoft/Desktop/MorfoErp-main/MorfoErp.Domain/bin/Release/net7.0/MorfoErp.Domain.dll
+/Users/mcodesoft/Desktop/MorfoErp-main/MorfoErp.Domain/bin/Release/net7.0/MorfoErp.Domain.pdb
+/Users/mcodesoft/Desktop/MorfoErp-main/MorfoErp.Domain/obj/Release/net7.0/MorfoErp.Domain.csproj.AssemblyReference.cache
+/Users/mcodesoft/Desktop/MorfoErp-main/MorfoErp.Domain/obj/Release/net7.0/MorfoErp.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/mcodesoft/Desktop/MorfoErp-main/MorfoErp.Domain/obj/Release/net7.0/MorfoErp.Domain.AssemblyInfoInputs.cache
+/Users/mcodesoft/Desktop/MorfoErp-main/MorfoErp.Domain/obj/Release/net7.0/MorfoErp.Domain.AssemblyInfo.cs
+/Users/mcodesoft/Desktop/MorfoErp-main/MorfoErp.Domain/obj/Release/net7.0/MorfoErp.Domain.csproj.CoreCompileInputs.cache
+/Users/mcodesoft/Desktop/MorfoErp-main/MorfoErp.Domain/obj/Release/net7.0/MorfoErp.Domain.dll
+/Users/mcodesoft/Desktop/MorfoErp-main/MorfoErp.Domain/obj/Release/net7.0/refint/MorfoErp.Domain.dll
+/Users/mcodesoft/Desktop/MorfoErp-main/MorfoErp.Domain/obj/Release/net7.0/MorfoErp.Domain.pdb
+/Users/mcodesoft/Desktop/MorfoErp-main/MorfoErp.Domain/obj/Release/net7.0/ref/MorfoErp.Domain.dll

@@ -1,0 +1,532 @@
+﻿@using HrProject.Presentation.ViewModels;
+@model UserUpdateViewModel
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@using System.Security.Claims
+@using HrProject.Domain.Entities;
+@{
+
+    var infoComp = ViewBag.InfoComp as InfoCompany;
+    var changePass = ViewBag.ChangePassword;
+    var user = await UserManager.GetUserAsync(User);
+    var role = await UserManager.GetRolesAsync(user);
+    var userId = user.Id;
+}
+
+<h2>Kullanıcı Güncelle</h2>
+<div class="row">
+    <div class="col-xl-4">
+
+        <div class="card">
+            <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+
+                <img style="max-width:250px;" src="~/ProfilPhoto/@Model.ProfilPhoto" alt="Profile" class="rounded-circle">
+                <h2>@Model.Name @Model.SurName</h2>
+                <div class="social-links mt-2">
+                    <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+                    <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+                    <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col-xl-8">
+
+        <div class="card">
+            <div class="card-body pt-3">
+                <!-- Bordered Tabs -->
+                <ul class="nav nav-tabs nav-tabs-bordered" role="tablist">
+
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-overview" aria-selected="false" role="tab" tabindex="-1">Genel Bilgiler</button>
+                    </li>
+
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit" aria-selected="false" role="tab" tabindex="-1">Profili Düzenle</button>
+                    </li>
+
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-settings" aria-selected="false" role="tab" tabindex="-1">Ayarlar</button>
+                    </li>
+
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-change-password" aria-selected="true" role="tab">Şifremi Değiştir</button>
+                    </li>
+                    @if (role.Contains(Roller.Role_Muhasebe_Admin) || role.Contains(Roller.Role_Admin))
+                    {
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#info-company" aria-selected="false" role="tab">Firma Bilgileri</button>
+                        </li>
+                    }
+
+                </ul>
+                <div class="tab-content pt-2">
+
+                    <div class="tab-pane fade profile-overview" id="profile-overview" role="tabpanel">
+                        <h5 class="card-title">Hakkında</h5>
+                      
+                        <h5 class="card-title">Profil Detayları</h5>
+
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 label ">Ad Soyad</div>
+                            <div class="col-lg-9 col-md-8">@Model.Name  @Model.SurName</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 label">Şirket</div>
+                            <div class="col-lg-9 col-md-8">Elf Beton</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 label">Yapılan İş</div>
+                            <div class="col-lg-9 col-md-8">Planlama Birimi</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 label">Ülke </div>
+                            <div class="col-lg-9 col-md-8">Türkiye</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 label">Adress</div>
+                            <div class="col-lg-9 col-md-8">Çınar, Çankırı Blv No:102/2, 06750 Akyurt/Ankara</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 label">Telefon No</div>
+                            <div class="col-lg-9 col-md-8">(0312) 844 24 24</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-3 col-md-4 label">Email</div>
+                            <div class="col-lg-9 col-md-8">@Model.MailAdresi</div>
+                        </div>
+
+                    </div>
+
+                    <div class="tab-pane fade profile-edit pt-3" id="profile-edit" role="tabpanel">
+
+                        <!-- Profile Edit Form -->
+                        <form asp-action="UpdateUser" method="post" enctype="multipart/form-data">
+                            <input type="hidden" asp-for="Id" />
+                            <div class="row mb-3">
+                                <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <img style="max-width:250px;" src="~/ProfilPhoto/@Model.ProfilPhoto" alt="Profile">
+                                    <div class="pt-2">
+                                        <input type="file" asp-for="Photo" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Ad</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input  type="text" class="form-control" id="fullName" asp-for="Name">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Soyad</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input  type="text" class="form-control" id="fullName" asp-for="SurName">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="about" class="col-md-4 col-lg-3 col-form-label">Hakkında</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <textarea name="about" class="form-control" id="about" asp-for="Hakkinda" style="height: 100px">@Model.Hakkinda</textarea>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="company" class="col-md-4 col-lg-3 col-form-label">Şirket</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input name="company" type="text" class="form-control" id="company" value="Elf Beton Prefabrik A.Ş." readonly>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="Job" class="col-md-4 col-lg-3 col-form-label">İş</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input name="job" type="text" class="form-control" id="Job" readonly value="İnşaat Mühendisi">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="Country" class="col-md-4 col-lg-3 col-form-label">Ülke</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input name="country" type="text" class="form-control" id="Country" readonly value="Türkiye">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="Address" class="col-md-4 col-lg-3 col-form-label">Adress</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input  type="text" class="form-control" id="Address" asp-for="Adres">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Telelefon</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input  type="text" class="form-control" id="Phone" asp-for="Tel">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="Email" class="col-md-4 col-lg-3 col-form-label">Email</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input type="email" class="form-control"  asp-for="MailAdresi">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="Email" class="col-md-4 col-lg-3 col-form-label">Email Şifresi</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input  class="form-control" asp-for="MailSifresi">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="Email" class="col-md-4 col-lg-3 col-form-label">Renk</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input  type="color" class="form-control"  asp-for="Color">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="Email" class="col-md-4 col-lg-3 col-form-label">Personel Numarası</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input class="form-control"  asp-for="PersonelNumber" readonly>
+                                </div>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Kaydet</button>
+                            </div>
+                        </form>
+                        <div class="text-center">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#emailModal">Mail İşlemleri</button>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade pt-3" id="profile-settings" role="tabpanel">
+
+                        <!-- Settings Form -->
+                        <form>
+
+                            <div class="row mb-3">
+                                <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Email Bildirimleri</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="changesMade" checked="">
+                                        <label class="form-check-label" for="changesMade">
+                                            Hesabınızdaki değişiklikler
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="newProducts" checked="">
+                                        <label class="form-check-label" for="newProducts">
+                                            Yeni ürünler ve hizmetler hakkında bilgi
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="proOffers">
+                                        <label class="form-check-label" for="proOffers">
+                                            Pazarlama ve promosyon teklifleri
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="securityNotify" checked="" disabled="">
+                                        <label class="form-check-label" for="securityNotify">
+                                            Güvenlik uyarıları
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Değişiklikleri Kaydet</button>
+                            </div>
+
+                        </form><!-- End settings Form -->
+
+                    </div>
+
+                    <div class="tab-pane fade pt-3 active show" id="profile-change-password" role="tabpanel">
+                        <!-- Change Password Form -->
+                        <form asp-action="ChangePassword">
+
+                            <div class="row mb-3">
+                                <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Şimdiki Şifre</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input name="currentPassword" type="password" class="form-control" id="currentPassword">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">Yeni Şifre </label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input name="newpassword" type="password" class="form-control" id="newPassword">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Yeni Şifre Tekrar</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input name="renewpassword" type="password" class="form-control" id="renewPassword">
+                                </div>
+                            </div>
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Şifremi Değiştir</button>
+                            </div>
+
+                            <!-- Error Display -->
+                            @if (ViewData.ModelState.IsValid == false)
+                            {
+                                <div class="alert alert-danger mt-3" role="alert">
+                                    <ul>
+                                        @foreach (var modelState in ViewData.ModelState.Values)
+                                        {
+                                            foreach (var error in modelState.Errors)
+                                            {
+                                                <li>@error.ErrorMessage</li>
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            }
+                            else if (ViewData.ModelState.IsValid == true)
+                            {
+                                @if (changePass)
+                                {
+
+                                    <div class="alert alert-success">
+                                        Şifreniz Başarıyla Güncellendi
+                                    </div>
+                                }
+                            }
+                            <!-- End Error Display -->
+
+                        </form><!-- End Change Password Form -->
+                    </div>
+
+                    <div class="tab-pane fade info-company pt-3" id="info-company" role="tabpanel">
+                        <!-- Change Password Form -->
+                        <form asp-action="UpdateInfoComp" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="Id" value="@infoComp.Id" />
+                            <input type="hidden" name="Resim" value="@infoComp.Resim" />
+                            <div class="row mb-3">
+                                <label for="EArsivHarf" class="col-md-4 col-lg-3 col-form-label">EArsivHarf</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input name="EArsivHarf" value="@infoComp.EArsivHarf" type="text" class="form-control" id="EArsivHarf">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="Unvan" class="col-md-4 col-lg-3 col-form-label">Firma Logosu</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input name="resim"  type="file" class="form-control" id="Resim">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="Unvan" class="col-md-4 col-lg-3 col-form-label">Unvan</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input name="Unvan" value="@infoComp.Unvan"  type="text" class="form-control" id="Unvan">
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <label for="YetkiliAdSoyad" class="col-md-4 col-lg-3 col-form-label">YetkiliAdSoyad</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input name="YetkiliAdSoyad" value="@infoComp.YetkiliAdSoyad" type="text" class="form-control" id="YetkiliAdSoyad">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="VKN_TCKN" class="col-md-4 col-lg-3 col-form-label">VKN_TCKN</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input name="VKN_TCKN" type="text" value="@infoComp.VKN_TCKN" class="form-control" id="VKN_TCKN">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="VergiDairesi" class="col-md-4 col-lg-3 col-form-label">VergiDairesi</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input name="VergiDairesi" type="text" value="@infoComp.VergiDairesi" class="form-control" id="VergiDairesi">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="TicaretSicilNo" class="col-md-4 col-lg-3 col-form-label">TicaretSicilNo</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input name="TicaretSicilNo" type="text" value="@infoComp.TicaretSicilNo" class="form-control" id="TicaretSicilNo">
+                                </div>
+                            </div>
+
+                          
+                            <div class="row mb-3">
+                                <label for="Telefon" class="col-md-4 col-lg-3 col-form-label">Telefon</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input name="Telefon" type="text" value="@infoComp.Telefon" class="form-control" id="Telefon">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="WebAdres" class="col-md-4 col-lg-3 col-form-label">WebAdres</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input name="WebAdres" type="text" value="@infoComp.WebAdres" class="form-control" id="WebAdres">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="KapiNo" class="col-md-4 col-lg-3 col-form-label">KapiNo</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input name="KapiNo" type="text" value="@infoComp.KapiNo" class="form-control" id="KapiNo">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="BinaNo" class="col-md-4 col-lg-3 col-form-label">BinaNo</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input name="BinaNo" type="text" value="@infoComp.BinaNo" class="form-control" id="BinaNo">
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label for="CaddeSokakBulvar" class="col-md-4 col-lg-3 col-form-label">CaddeSokakBulvar</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input name="CaddeSokakBulvar" value="@infoComp.CaddeSokakBulvar" type="text" class="form-control" id="CaddeSokakBulvar">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="IlceSemtMahalle" class="col-md-4 col-lg-3 col-form-label">IlceSemtMahalle</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input name="IlceSemtMahalle" type="text" value="@infoComp.IlceSemtMahalle" class="form-control" id="IlceSemtMahalle">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="Sehir" class="col-md-4 col-lg-3 col-form-label">Sehir</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input name="Sehir" type="text" class="form-control" value="@infoComp.Sehir" id="Sehir">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="Ulke" class="col-md-4 col-lg-3 col-form-label">Ulke</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input name="Ulke" type="text" class="form-control" value="@infoComp.Ulke" id="Ulke">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label for="SirketAdresi" class="col-md-4 col-lg-3 col-form-label">SirketAdresi</label>
+                                <div class="col-md-8 col-lg-9">
+                                    <input name="SirketAdresi" type="text" class="form-control" value="@infoComp.SirketAdresi" id="SirketAdresi">
+                                </div>
+                            </div>
+
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Kaydet</button>
+                            </div>
+
+
+                        </form><!-- End Change Password Form -->
+                    </div>
+                </div><!-- End Bordered Tabs -->
+
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="modal fade" id="emailModal" tabindex="-1" aria-labelledby="emailModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="emailModalLabel">User Email Settings</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="emailForm">
+                    <input type="hidden" id="ApplicationUserId" name="ApplicationUserId" value="@Model.Id" />
+                    <div class="mb-3">
+                        <label for="host" class="form-label">Host</label>
+                        <input type="text" class="form-control" id="host" name="host" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="Baslik" class="form-label">Başlık</label>
+                        <input type="text" class="form-control" id="Baslik" name="Baslik" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="gondermeport" class="form-label">Gönderme Portu</label>
+                        <input type="number" class="form-control" id="gondermeport" name="gondermeport" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="almaport" class="form-label">Alma Portu</label>
+                        <input type="number" class="form-control" id="almaport" name="almaport" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                <button type="button" class="btn btn-primary" id="saveEmailSettings">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('#emailModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget);
+            var userId = $('#ApplicationUserId').val();
+
+            $.ajax({
+                url: '/User/GetUserEmailSettings',
+                type: 'GET',
+                data: { userId: userId },
+                success: function (data) {
+                    if (data) {
+                        $('#host').val(data.host);
+                        $('#Baslik').val(data.Baslik);
+                        $('#gondermeport').val(data.gondermeport);
+                        $('#almaport').val(data.almaport);
+                    } else {
+                        $('#host').val('');
+                        $('#Baslik').val('');
+                        $('#gondermeport').val('');
+                        $('#almaport').val('');
+                    }
+                },
+                error: function () {
+                    alert('Veri alınırken bir hata oluştu.');
+                }
+            });
+        });
+
+        $('#saveEmailSettings').click(function () {
+            var formData = $('#emailForm').serialize();
+
+            $.ajax({
+                url: '/User/SaveUserEmailSettings',
+                type: 'POST',
+                data: formData,
+                success: function (data) {
+                    if (data.success) {
+                        alert('Ayarlar kaydedildi.');
+                        $('#emailModal').modal('hide');
+                    } else {
+                        alert('Ayarlar kaydedilirken bir hata oluştu.');
+                    }
+                },
+                error: function () {
+                    alert('Ayarlar kaydedilirken bir hata oluştu.');
+                }
+            });
+        });
+    });
+
+</script>

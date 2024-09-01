@@ -1,0 +1,30 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "bootstrap@5.3.2",
+      "destination": "wwwroot/bootstrap/"
+    },
+    {
+      "library": "devextreme@23.1.6",
+      "destination": "wwwroot/devextreme/"
+    },
+    {
+      "library": "devextreme-aspnet-data@3.0.0",
+      "destination": "wwwroot/devextreme-aspnet-data/"
+    },
+    {
+      "library": "devexpress-gantt@4.1.50",
+      "destination": "wwwroot/devexpress-gantt/"
+    },
+    {
+      "library": "datatables.net@1.13.6",
+      "destination": "wwwroot/datatables/"
+    },
+    {
+      "library": "datatables.net-dt@1.13.6",
+      "destination": "wwwroot/datatables-dt/"
+    }
+  ]
+}

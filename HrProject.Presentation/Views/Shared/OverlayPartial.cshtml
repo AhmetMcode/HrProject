@@ -1,0 +1,67 @@
+﻿<style>
+    /* Overlay */
+    #overlays {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Daha koyu bir arkaplan rengi */
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Yükleniyor mesajı */
+    #loading-message {
+        background-color: #3498db; /* Canlı bir arka plan rengi */
+        color: white;
+        padding: 20px 40px; /* Daha geniş içerik boşluğu */
+        border-radius: 10px; /* Daha yuvarlak köşeler */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Daha belirgin bir gölge */
+        text-transform: uppercase; /* Büyük harfler */
+        font-family: 'Arial', sans-serif; /* Yazı tipi */
+        font-weight: bold; /* Kalın yazı */
+        letter-spacing: 2px; /* Harf aralığı */
+        display: inline-block; /* Bloğu içerik genişliğine göre ayarla */
+    }
+
+    /* Animasyon düzeltmesi */
+    @@keyframes moveLetters {
+        0% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-10px);
+        }
+
+        100% {
+            transform: translateY(0);
+        }
+    }
+
+    /* Harf stilleri ve animasyonun uygulanması */
+    #loading-message span {
+        display: inline-block;
+        margin: 0 2px;
+        animation: moveLetters 1.5s ease-in-out infinite;
+    }
+</style>
+
+<div id="overlays">
+    <div id="loading-message">
+        <span>Y</span>
+        <span>Ü</span>
+        <span>K</span>
+        <span>L</span>
+        <span>E</span>
+        <span>N</span>
+        <span>İ</span>
+        <span>Y</span>
+        <span>O</span>
+        <span>R</span>
+    </div>
+    </div>
+        

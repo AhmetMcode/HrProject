@@ -1,0 +1,152 @@
+﻿@using HrProject.Domain.Entities
+@model List<Person>
+
+@{
+    DateTime date = (DateTime)ViewBag.Tarih;
+    var tallyDetails = ViewBag.TallyDetails as List<TallyDetail>;
+    var avans = ViewBag.Avans as List<PersonAdvancePayment>;
+    var personBonus = ViewBag.PersonBonus as List<PersonBonus>;
+    decimal totalPayment = 0;
+
+    foreach (var item in Model)
+    {
+        decimal? maas = item.PersonSalaries
+            .Where(x => x.StartDate.Date <= date.Date &&
+                        (x.FinishDate.HasValue && x.FinishDate.Value.Date >= date.Date || x.FinishDate == null))
+            .OrderByDescending(x => x.Id)
+            .FirstOrDefault()?.Salary;
+
+        var sumOfWorkTime = tallyDetails.Where(x => x.PersonId == item.Id).Sum(x => Convert.ToDecimal(x.WorkTime));
+
+        if (maas.HasValue && maas > 0)
+        {
+            if (item.WorkingTime == 0)
+            {
+                totalPayment += Convert.ToInt32((sumOfWorkTime / 225) * Convert.ToDecimal(maas));
+            }
+            else if (item.WorkingTime > 0)
+            {
+                totalPayment += Convert.ToInt32((sumOfWorkTime / item.WorkingTime) * Convert.ToDecimal(maas));
+            }
+        }
+    }
+}
+
+<h3>Tüm Personel Maaş Listesi</h3>
+<div class="card">
+    <div class="card-body">
+        <h5>Toplam Ücret: @totalPayment.ToString("N2")</h5>
+        <form method="get" asp-action="AllPaymentsList">
+            <div class="form-group">
+                <label for="tarih">Tarih:</label>
+                <input id="tarih" name="tarih" type="date" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-search"></i> Ara
+            </button>
+        </form>
+        <div class="table-responsive">
+            <table id="example" class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Tc</th>
+                        <th>Ad Soyad</th>
+                        <th>Aktif Maaş</th>
+                        <th>Çalışması Gereken Saat</th>
+                        <th>Çalışılan Saat</th>
+                        <th>Gelinen Gün</th>
+                        <th>Gelmediği Günler</th>
+                        <th>Ödenecek Prim</th>
+                        <th>Kullanılan Avans</th>
+                        <th>Hak Edilen Maas</th>
+                        <th>Ödenecek Ücret</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        decimal? maas = item.PersonSalaries
+                            .Where(x => x.StartDate.Date <= date.Date &&
+                                        (x.FinishDate.HasValue && x.FinishDate.Value.Date >= date.Date || x.FinishDate == null))
+                            .OrderByDescending(x => x.Id)
+                            .FirstOrDefault()?.Salary;
+
+                        var sumOfWorkTime = tallyDetails.Where(x => x.PersonId == item.Id).Sum(x => Convert.ToDecimal(x.WorkTime));
+                        bool isFullAttendance = tallyDetails.Where(x => x.PersonId == item.Id).All(x => x.WorkTime != Convert.ToDouble(0));
+
+                        decimal hakEdilenMaas = 0;
+                        decimal odenecekUcret = 0;
+
+                        if (maas.HasValue && maas > 0)
+                        {
+                            if (item.WorkingTime > 0)
+                            {
+                                hakEdilenMaas = Convert.ToInt32(sumOfWorkTime / item.WorkingTime * Convert.ToDecimal(maas));
+                            }
+                            else
+                            {
+                                hakEdilenMaas = Convert.ToInt32(sumOfWorkTime / 225 * Convert.ToDecimal(maas));
+                            }
+
+                            odenecekUcret = hakEdilenMaas
+                                - avans.Where(x => x.PersonId == item.Id).ToList().Sum(x => x.BonusAmount)
+                                + personBonus.Where(x => x.PersonId == item.Id).ToList().Sum(x => x.BonusAmount);
+                        }
+
+                        <tr data-person-id="@item.Id">
+                            <td>@item.TcNo</td>
+                            <td>@item.Name - @item.Surname</td>
+                            <td>@maas</td>
+                            <td>@item.WorkingTime</td>
+                            <td>@sumOfWorkTime</td>
+                            <td>@tallyDetails.Where(x => x.PersonId == item.Id).ToList().Count</td>
+                            <td>
+                                @if (isFullAttendance)
+                                {
+                                    <span>-</span>
+                                }
+                                else
+                                {
+                                    var absentDates = tallyDetails.Where(x => x.PersonId == item.Id && x.WorkTime == Convert.ToDouble(0))
+                                        .Select(x => x.DayOfWork.ToString("dd.MM"))
+                                        .ToList();
+                                    @string.Join(", ", absentDates)
+                                }
+                            </td>
+                            <td>@personBonus.Where(x => x.PersonId == item.Id).ToList().Sum(x => x.BonusAmount)</td>
+                            <td>@avans.Where(x => x.PersonId == item.Id).ToList().Sum(x => x.BonusAmount)</td>
+                            <td>@hakEdilenMaas</td>
+                            <td>@odenecekUcret</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>$(document).ready(function () {
+            $('#example').DataTable({
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/tr.json',
+                },
+                dom: 'Bfrtip',
+                buttons: [
+                    'copyHtml5',
+                    'excelHtml5',
+                    'csvHtml5',
+                    'pdfHtml5'
+                ],
+                pageLength: 25 // Bir sayfada 25 satır göster
+            });
+
+            // Row click event
+            $('#example tbody').on('click', 'tr', function () {
+                var personId = $(this).data('person-id');
+                if (personId) {
+                    window.location.href = '/HumanResource/PersonelDetail/' + personId;
+                }
+            });
+        });</script>
+}

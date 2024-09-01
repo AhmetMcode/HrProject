@@ -1,0 +1,196 @@
+﻿@model IEnumerable<HrProject.Domain.Entities.Person>
+
+<style>
+    .person-card {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 20px;
+        background-color: #fff;
+        text-align: center;
+        margin: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .avatar {
+        width: 80px;
+        height: 80px;
+        background-color: #007BFF;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 32px;
+        margin: 0 auto;
+    }
+
+    .person-name {
+        font-size: 20px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .person-title {
+        font-size: 18px;
+        color: #007BFF;
+    }
+
+    .person-tcno {
+        font-size: 16px;
+        color: #555;
+    }
+
+    h3 {
+        text-align: center;
+        color: #007BFF;
+        font-weight: bold;
+        margin-top: 20px;
+        font-size: 28px;
+    }
+
+    .list-view {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 10px;
+        margin: 10px;
+        background-color: #f9f9f9;
+    }
+
+    .list-view .person-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .toggle-btn,
+    .filter-btn {
+        cursor: pointer;
+    }
+
+    .input-group {
+        margin-top: 20px;
+    }
+
+    media (max-width: 768px) {
+        .input-group {
+            flex-direction: column;
+        }
+
+        .input-group .form-control,
+        .input-group .input-group-append {
+            width: 100%;
+        }
+
+        .input-group .input-group-append {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h3 class="display-4 text-center">Personeller</h3>
+        </div>
+    </div>
+    <div class="row mt-2 justify-content-center">
+        <div class="col-lg-10 col-md-12">
+            <div class="input-group">
+                <input class="form-control" id="nameFilter" placeholder="Ad Giriniz" />
+                <div class="input-group-append">
+                    <button id="toggleViewBtn" class="btn btn-info toggle-btn">Liste Görünümü</button>
+                    <button id="showActiveBtn" class="btn btn-success filter-btn">Çalışan Personelleri Göster</button>
+                    <button id="showInactiveBtn" class="btn btn-danger filter-btn">Ayrılan Personelleri Göster</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-2 d-flex justify-content-center" id="personContainer">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3 person-view @item.IsActiveWorker">
+                <div class="person-card">
+                    <a asp-action="PersonelDetail" asp-route-id="@item.Id">
+                        <div class="avatar">
+                            @item.Name.ToUpper()[0] @item.Surname.ToUpper()[0]
+                        </div>
+                        <div class="person-name">
+                            <span>@item.Name.ToUpper() @item.Surname.ToUpper()</span>
+                        </div>
+                        <div class="person-title">
+                            <span>Pozisyon:</span>
+                            <span>@item.PersonPosition.Name</span>
+                        </div>
+                        <div class="person-tcno">
+                            <span>Telefon:</span>
+                            <span>@item.PhoneNumber</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-12 list-view d-none @item.IsActiveWorker">
+                <div class="person-info">
+                    <span class="person-name">@item.Name.ToUpper() @item.Surname.ToUpper()</span>
+                    <span>Pozisyon: @item.PersonPosition.Name</span>
+                    <span>Telefon: @item.PhoneNumber</span>
+                    <a class="btn btn-info btn-sm" asp-action="PersonelDetail" asp-route-id="@item.Id">Detaylar</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>$(document).ready(function () {
+            var currentFilter = "active"; // Default to showing active persons
+
+            // Filter functionality
+            $("#nameFilter").on("input", function () {
+                var filterValue = $(this).val().toLowerCase();
+                $("#personContainer .person-view, #personContainer .list-view").each(function () {
+                    var personName = $(this).find(".person-name").text().toLowerCase();
+                    var isActive = $(this).hasClass("True");
+                    var isVisible = isActive ? (currentFilter === "active") : (currentFilter === "inactive");
+
+                    if (personName.includes(filterValue) && isVisible) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+
+            // Toggle view functionality
+            $("#toggleViewBtn").click(function () {
+                $(".person-view").toggleClass("d-none");
+                $(".list-view").toggleClass("d-none");
+            });
+
+            // Show active persons
+            $("#showActiveBtn").click(function () {
+                currentFilter = "active";
+                $("#personContainer .person-view, #personContainer .list-view").each(function () {
+                    if ($(this).hasClass("True")) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+
+            // Show inactive persons
+            $("#showInactiveBtn").click(function () {
+                currentFilter = "inactive";
+                $("#personContainer .person-view, #personContainer .list-view").each(function () {
+                    if ($(this).hasClass("False")) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            });
+        });</script>
+}

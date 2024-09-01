@@ -1,0 +1,148 @@
+﻿@using HrProject.Domain.Entities;
+@using HrProject.Presentation.ViewModels;
+@model PersonelDocumentViewModel
+@{
+
+    var authorityId = ViewData["authorityId"] != null ? (int)ViewData["authorityId"] : (int?)null;
+
+}
+
+<style>
+    #overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.7);
+        z-index: 9999;
+        display: none;
+    }
+
+    #loading-message {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .form-group label {
+        font-size: 25px;
+        display: flex;
+        align-items: center;
+    }
+
+    .fas {
+        font-size: 30px;
+        color: #92968f; /* İkon rengini yeşil olarak ayarla */
+        margin-right: 20px;
+    }
+
+    .btn i {
+        color: inherit; /* Orijinal renk değerini koru */
+    }
+
+    input.form-control:focus {
+        border-color: #80bdff; /* Odaklandığında çerçeve rengi */
+        box-shadow: 0 0 10px rgba(128, 189, 255, 0.8); /* Gölge efekti */
+    }
+
+    .custom-table tr:hover {
+        background-color: #0D6EFD;
+    }
+    /* DataTables Buttons sağ üst köşe */
+    .dataTables_wrapper .dt-buttons {
+        position: absolute;
+        top: -16%;
+        right: 0;
+    }
+</style>
+
+@{
+    int i = 1;
+}
+
+<div id="overlay">
+    <div id="loading-message">
+        <div class="spinner-border" style="width: 50px; height: 50px;" role="status">
+            <span class="visually-hidden">Yükleniyor...</span>
+        </div>
+    </div>
+</div>
+
+<h3>Zorunlu Belgeye Sahip Personel Listesi</h3>
+<div class="card">
+    <div class="card-body">
+
+        <a class="btn btn-warning my-3" asp-action="GetPerDocList" asp-controller="PersonelDocument"> <i class="fas fa-arrow-left"></i></a>
+
+        <form id="myForm" method="get" action="@Url.Action("GetRequiredDocPerList")">
+            <div class="row mb-4">
+
+                <div class="form-group col-md-2">
+                    <label for="documentCode">Yetki Adı:</label>
+                    <select id="authorityId" name="authorityId" class="form-control">
+                        <option value="">Seçiniz</option>
+                        @foreach (var auth in ViewBag.PersonelAuthorities)
+                        {
+                            <option value="@auth.Id @(auth.Id == authorityId ? "selected" : "")">@auth.Name</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-1 mt-4">
+                    <button type="submit" class="btn btn-success my-2"> <i class="fas fa-search" style="font-size: 24px;"></i> </button>
+                </div>
+            </div>
+            
+        </form>
+
+
+
+        <table id="example" class="table table-hover custom-table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Personel Bilgileri</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.PersonelInterDocs != null && Model.PersonelInterDocs.Any())
+                {
+                    foreach (var item in Model.PersonelInterDocs)
+                    {
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.Person.Name - @item.Person.Surname</td>
+                        </tr>
+                        i++;
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="2">Personel bulunamadı.</td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+        <!-- End Table with stripped rows -->
+
+    </div>
+</div>
+
+<script>
+    $(window).on('load', function () {
+        $('#overlay').fadeOut('slow');
+    });
+
+    $(document).on('submit', 'form', function () {
+        $('#overlay').fadeIn('slow');
+    });
+
+</script>

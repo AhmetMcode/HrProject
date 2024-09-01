@@ -1,0 +1,124 @@
+﻿@using HrProject.Domain.Entities
+@model List<Person>
+@{
+    DateTime date = (DateTime)ViewBag.Tarih;
+    var tallyDetails = ViewBag.TallyDetails as List<TallyDetail>; // Cast ViewBag data to a List<ProjectDetails>
+    var avans = ViewBag.Avans as List<PersonAdvancePayment>; // Cast ViewBag data to a List<ProjectDetails>
+    var personBonus = ViewBag.PersonBonus as List<PersonBonus>; // Cast ViewBag data to a List<ProjectDetails>
+    decimal totalPayment = 0;
+
+    foreach (var item in Model)
+    {
+        decimal? maas = item.PersonSalaries
+    .Where(x => x.StartDate.Date <= date.Date &&
+                (x.FinishDate.HasValue && x.FinishDate.Value.Date >= date.Date || x.FinishDate == null))
+    .OrderByDescending(x => x.Id)
+    .FirstOrDefault()?.Salary;
+
+        var sumOfWorkTime = tallyDetails.Where(x => x.PersonId == item.Id).Sum(x => Convert.ToDecimal(x.WorkTime));
+        if (item.WorkingTime == 0)
+        {
+        totalPayment += Convert.ToInt32((sumOfWorkTime / 225 * Convert.ToDecimal(maas)));
+            
+        }
+        else
+        {
+            totalPayment += Convert.ToInt32((sumOfWorkTime / item.WorkingTime * Convert.ToDecimal(maas)));
+
+        }
+    }
+}
+<div class="card">
+    <div class="card-body">
+        <h4>Toplam Ücret: @totalPayment</h4>
+        <form method="get" asp-action="PaymentList">
+            <input type="hidden" name="id" value="@ViewBag.Id" />
+            <div class="form-group">
+                <label for="tarih">Tarih:</label>
+                <input id="tarih" name="tarih" type="date" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-search"></i> Ara
+            </button>
+        </form>
+        <div class="table-responsive">
+            <table id="example" class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Tc</th>
+                        <th>Ad Soyad</th>
+                        <th>Aktif Maaş</th>
+                        <th>Çalışması Gereken Saat</th>
+                        <th>Çalışılan Saat</th>
+                        <th>Gelinen Gün</th>
+                        <th>Gelmediği Günler</th>
+                        <th>Ödenecek Prim</th>
+                        <th>Kullanılan Avans</th>
+                        <th>Hak Edilen Maas</th>
+                        <th>Ödenecek Ucret</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        decimal? maas = item.PersonSalaries
+                        .Where(x => x.StartDate.Date <= date.Date &&
+                        (x.FinishDate.HasValue && x.FinishDate.Value.Date >= date.Date || x.FinishDate == null))
+                        .OrderByDescending(x => x.Id)
+                        .FirstOrDefault()?.Salary;
+
+                        var sumOfWorkTime = tallyDetails.Where(x => x.PersonId == item.Id).Sum(x => Convert.ToDecimal(x.WorkTime));
+                        bool isFullAttendance = tallyDetails.Where(x => x.PersonId == item.Id).All(x => x.WorkTime != Convert.ToDouble(0));
+
+                        <tr>
+                            <td>@item.TcNo</td>
+                            <td>@item.Name - @item.Surname</td>
+                            <td>@maas</td>
+                            <td>@item.WorkingTime</td>
+                            <td>@tallyDetails.Where(x => x.PersonId == item.Id).ToList().Sum(x => x.WorkTime)</td>
+                            <td>@tallyDetails.Where(x => x.PersonId == item.Id).ToList().Count</td>
+                            <td>
+                                @if (isFullAttendance)
+                                {
+                                    <span>-</span>
+                                }
+                                else
+                                {
+                                    var absentDates = tallyDetails.Where(x => x.PersonId == item.Id && x.WorkTime == Convert.ToDouble(0))
+                                    .Select(x => x.DayOfWork.ToString("dd.MM"))
+                                    .ToList();
+                                    @string.Join(", ", absentDates)
+                                }
+                            </td>
+                            <td>@personBonus.Where(x => x.PersonId == item.Id).ToList().Sum(x => x.BonusAmount)</td>
+                            <td>@avans.Where(x => x.PersonId == item.Id).ToList().Sum(x => x.BonusAmount)</td>
+                            <td>@Convert.ToInt32(sumOfWorkTime / item.WorkingTime * Convert.ToDecimal(maas))</td>
+                            <td>@Convert.ToInt32((sumOfWorkTime / item.WorkingTime * Convert.ToDecimal(maas))- avans.Where(x => x.PersonId == item.Id).ToList().Sum(x => x.BonusAmount) + @personBonus.Where(x => x.PersonId == item.Id).ToList().Sum(x => x.BonusAmount))</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable({
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/tr.json',
+                },
+                dom: 'Bfrtip',
+                buttons: [
+                    'copyHtml5',
+                    'excelHtml5',
+                    'csvHtml5',
+                    'pdfHtml5'
+                ],
+                pageLength: 25 // Bir sayfada 25 satır göster
+            });
+        });
+
+    </script>
+}

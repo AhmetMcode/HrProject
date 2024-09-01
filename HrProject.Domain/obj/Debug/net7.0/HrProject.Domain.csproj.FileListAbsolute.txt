@@ -1,0 +1,12 @@
+/Users/mcodesoft/Desktop/HrProject/HrProject.Domain/bin/Debug/net7.0/HrProject.Domain.deps.json
+/Users/mcodesoft/Desktop/HrProject/HrProject.Domain/bin/Debug/net7.0/HrProject.Domain.dll
+/Users/mcodesoft/Desktop/HrProject/HrProject.Domain/bin/Debug/net7.0/HrProject.Domain.pdb
+/Users/mcodesoft/Desktop/HrProject/HrProject.Domain/obj/Debug/net7.0/HrProject.Domain.csproj.AssemblyReference.cache
+/Users/mcodesoft/Desktop/HrProject/HrProject.Domain/obj/Debug/net7.0/HrProject.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/mcodesoft/Desktop/HrProject/HrProject.Domain/obj/Debug/net7.0/HrProject.Domain.AssemblyInfoInputs.cache
+/Users/mcodesoft/Desktop/HrProject/HrProject.Domain/obj/Debug/net7.0/HrProject.Domain.AssemblyInfo.cs
+/Users/mcodesoft/Desktop/HrProject/HrProject.Domain/obj/Debug/net7.0/HrProject.Domain.csproj.CoreCompileInputs.cache
+/Users/mcodesoft/Desktop/HrProject/HrProject.Domain/obj/Debug/net7.0/HrProject.Domain.dll
+/Users/mcodesoft/Desktop/HrProject/HrProject.Domain/obj/Debug/net7.0/refint/HrProject.Domain.dll
+/Users/mcodesoft/Desktop/HrProject/HrProject.Domain/obj/Debug/net7.0/HrProject.Domain.pdb
+/Users/mcodesoft/Desktop/HrProject/HrProject.Domain/obj/Debug/net7.0/ref/HrProject.Domain.dll

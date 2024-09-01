@@ -1,0 +1,113 @@
+﻿@using HrProject.Presentation.ViewModels;
+@using System.Globalization;
+@model TallyDetailViewModel
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .sticky {
+        position: sticky;
+        background-color: #f2f2f2;
+        left: 0;
+    }
+
+    .first-column {
+        z-index: 1;
+    }
+    .action-button {
+        width: 40px; /* Buton genişliği */
+        height: 40px; /* Buton yüksekliği */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0; /* Kenar boşluklarını sıfırla */
+    }
+
+        .action-button i {
+            font-size: 16px; /* İkon boyutunu ayarla */
+        }
+
+</style>
+<div class="card">
+    <div class="card-body">
+        <h2>Personeller</h2>
+        <form method="get" asp-action="GetPersonByWorkPlace">
+            <input type="hidden" name="id" value="@ViewBag.Id" />
+            <div class="form-group">
+                <label for="tarih">Tarih:</label>
+                <input id="tarih" name="tarih" type="date" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-search"></i> Ara
+            </button>
+        </form>
+        <div class="table-responsive">
+
+            <table class="table" id="personTable">
+                <thead>
+                    <tr>
+                        <th scope="col" class="first-column">Ad Soyad</th>
+                        @foreach (var dateTime in Model.DateTimes)
+                        {
+                            var cellStyle = dateTime.DayOfWeek == DayOfWeek.Sunday ? "background-color: red;" : "";
+                            var tallyDetailExists = Model.TallyDetails.Any(td => td.DayOfWork.Date == dateTime.Date);
+
+                            <th scope="col" style="@cellStyle">
+                                @dateTime.ToString("dd.MM.yy")
+                                @dateTime.ToString("dddd", new CultureInfo("tr-TR"))
+                                <span style="font-size: 12px;">@(tallyDetailExists ? "Kaydedildi" : "Kaydedilmedi")</span>
+                                <br>
+                                <div style="display: flex; align-items: center; justify-content: center; gap: 5px;">
+                                    <a class="btn btn-primary btn-sm action-button" onclick="showFileInput('@dateTime.ToString("dd.MM.yy")')">
+                                        <i class="fas fa-file-excel"></i>
+                                    </a>
+                                    <input type="file" id="excelFileInput" accept=".xls,.xlsx" style="display: none;" onchange="handleFileUpload(event)" />
+                                    <a class="btn btn-success btn-sm action-button" id="@dateTime.Date.ToString("dd-MM-yyyy")" onclick="saveColumn(this)">
+                                        <i class="fas fa-save"></i>
+                                    </a>
+                                </div>
+                            </th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var person in Model.Persons)
+                    {
+                        <tr data-person-id="@person.Id">
+                            <td class="first-column" data-ad="@person.Name" data-soyad="@person.Surname" style="background-color: @((DateTime.Now.DayOfWeek == DayOfWeek.Sunday) ? "red" : "")">@person.Name @person.Surname</td>
+                            @foreach (var dateTime in Model.DateTimes)
+                            {
+                                var cellStyle = dateTime.DayOfWeek == DayOfWeek.Sunday ? "background-color: red;" : "";
+                                var tallyDetail = Model.TallyDetails.FirstOrDefault(td => td.DayOfWork.Date == dateTime.Date && td.PersonId == person.Id);
+                                <td style="@cellStyle">
+                                    @{
+                                        string formattedValue = (tallyDetail != null)
+                            ? tallyDetail.WorkTime.ToString("0.00", CultureInfo.InvariantCulture)
+                            : "7.5";
+                                    }
+                                    <input class="tDId" type="hidden" value="@((tallyDetail != null) ? tallyDetail.Id : 0)" />
+                                    <input style="width:80px;" class="form-control" type="number" date="@dateTime.Date" tarihjs="@dateTime.Date.ToString("dd.MM.yy")" id="@($"input_{person.Id}_{dateTime:yyyyMMdd}")" value="@formattedValue">
+                                </td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+
+        </div>
+
+    </div>
+</div>
+<!-- js-xls kütüphanesini dahil edin -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+
+<script src="~/js/HumanResource/GetPersonByWorkPlace.js"></script>

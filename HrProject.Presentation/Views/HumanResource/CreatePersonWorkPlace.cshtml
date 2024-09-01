@@ -1,0 +1,117 @@
+﻿@model IEnumerable<HrProject.Domain.Entities.Workplace>
+
+<div class="container mt-4">
+    <h2>Mevcut Çalışma Yerleri Türleri</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Çalışma Yeri Adı</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var workPlace in Model)
+            {
+                <tr>
+                    <input type="hidden" name="Id" value="@workPlace.Id" />
+                    <td><input id="name-@workPlace.Id" name="Name" value="@workPlace.Name" /></td>
+                    <td>
+                        <button class="btn btn-primary" onclick="editWorkPlace(@workPlace.Id)">Düzenle</button>
+                        <button class="btn btn-danger" onclick="deleteWorkPlace(@workPlace.Id)">Sil</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h2>Yeni Çalışma Yeri Ekle</h2>
+    <div class="row">
+        <div class="col-md-6">
+            @Html.Partial("AddPersonWorkPlace", new HrProject.Domain.Entities.Workplace())
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function editWorkPlace(id) {
+        var name = $('#name-' + id).val();
+        Swal.fire({
+            title: 'Düzenleme İşlemi',
+            text: 'Bu çalışma yerini düzenlemek istediğinize emin misiniz?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Evet, düzenle!',
+            cancelButtonText: 'İptal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/HumanResource/EditPersonWorkPlace',
+                    type: 'POST',
+                    data: {
+                        Id: id,
+                        Name: name
+                    },
+                    success: function (response) {
+                        Swal.fire(
+                            'Başarılı!',
+                            'Çalışma yeri düzenlendi.',
+                            'success'
+                        ).then(() => {
+                            location.reload();
+                        });
+                    },
+                    error: function () {
+                        Swal.fire(
+                            'Hata!',
+                            'İşlem sırasında bir hata oluştu.',
+                            'error'
+                        );
+                    }
+                });
+            }
+        });
+    }
+
+    function deleteWorkPlace(id) {
+        Swal.fire({
+            title: 'Silme İşlemi',
+            text: 'Bu çalışma yerini silmek istediğinize emin misiniz?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Evet, sil!',
+            cancelButtonText: 'İptal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/HumanResource/DeletePersonWorkPlaceConfirmed',
+                    type: 'POST',
+                    data: {
+                        Id: id
+                    },
+                    success: function (response) {
+                        Swal.fire(
+                            'Başarılı!',
+                            'Çalışma yeri silindi.',
+                            'success'
+                        ).then(() => {
+                            location.reload();
+                        });
+                    },
+                    error: function () {
+                        Swal.fire(
+                            'Hata!',
+                            'İşlem sırasında bir hata oluştu.',
+                            'error'
+                        );
+                    }
+                });
+            }
+        });
+    }
+</script>

@@ -1,0 +1,195 @@
+﻿@model IEnumerable<HrProject.Presentation.ViewModels.PersonListViewModel>
+
+@{
+    int i = 1;
+}
+
+<style>
+    #overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.7);
+        z-index: 9999;
+        display: none;
+    }
+
+    #loading-message {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .custom-table tr:hover {
+        background-color: #0D6EFD;
+        cursor: pointer;
+    }
+
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .custom-table th, .custom-table td {
+        white-space: nowrap;
+    }
+
+    .search-form {
+        margin-bottom: 15px;
+    }
+
+        .search-form input {
+            margin-right: 10px;
+        }
+
+    .input-group {
+        margin-top: 20px;
+    }
+
+    media (max-width: 768px) {
+        .input-group
+
+    {
+        flex-direction: column;
+    }
+
+    .input-group .form-control,
+    .input-group .input-group-append {
+        width: 100%;
+    }
+
+    .input-group .input-group-append {
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+    }
+    }
+</style>
+
+<div id="overlay">
+    <div id="loading-message">
+        <div class="spinner-border" style="width: 50px; height: 50px;" role="status">
+            <span class="visually-hidden">Yükleniyor...</span>
+        </div>
+    </div>
+</div>
+
+<h3>Personel Listesi</h3>
+<div class="card">
+    <div class="card-body">
+
+        <!-- Search Form -->
+        <div class="search-form">
+            <form id="searchForm">
+                <input type="text" id="searchTcNo" placeholder="T.C. No" />
+                <input type="text" id="searchName" placeholder="Adı" />
+                <input type="text" id="searchSurname" placeholder="Soyadı" />
+                <input type="text" id="searchPosition" placeholder="Pozisyon" />
+                <input type="text" id="searchPhone" placeholder="Telefon Numarası" />
+            </form>
+        </div>
+        <div class="table-responsive">
+            <table id="personTable" class="table table-hover custom-table">
+                <thead>
+                    <tr>
+                        <th scope="col">Resim</th>
+                        <th scope="col">T.C. No</th>
+                        <th scope="col">Adı</th>
+                        <th scope="col">Soyadı</th>
+                        <th scope="col">Pozisyon</th>
+                        <th scope="col">Çalıșma Yeri</th>
+                        <th scope="col">Telefon Numarası</th>
+                        <th scope="col">Çalışma Durumu</th>
+                        <th scope="col">Admin Onayı</th>
+                        <th scope="col">Çalışma Süresi</th>
+                        <th scope="col">Maaş</th>
+                        <th scope="col">IBAN</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var person in Model)
+                    {
+                        <tr data-person-id="@person.Id" class="@person.IsActiveWorker">
+                            <td>
+                                <img src="@(string.IsNullOrEmpty(person.ProfilePicture) ? Url.Content("~/HR/default-profile.png") : Url.Content($"~/HR/{person.ProfilePicture}"))"
+                                     alt="" style="width: 40px; height: 40px; border-radius: 10%;" />
+                            </td>
+                            <td>@person.TcNo</td>
+                            <td>@person.Name</td>
+                            <td>@person.Surname</td>
+                            <td>@person.Position</td>
+                            <td>@person.Workplace</td>
+                            <td>@person.PhoneNumber</td>
+                            <td>@(person.IsActiveWorker ? "Aktif Çalışan" : "İşten Ayrıldı")</td>
+                            <td>
+                                @(person.IsApproved ? Html.Raw($"{person.ApprovedBy}<br>{person.ApprovalDate?.ToString("dd.MM.yyyy")}") : "Bekliyor")
+                            </td>
+
+                            <td>@person.WorkingTime</td>
+                            <td>@person.Salary</td>
+                            <td>@person.IBAN</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Active/Inactive Filter Buttons -->
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>$(document).ready(function () {
+            // Pencere yüksekliğini al
+            var windowHeight = $(window).height();
+
+            // Tablo yüksekliğini hesapla (örneğin, pencere yüksekliğinin %60'ı)
+            var tableHeight = windowHeight * 0.62;
+
+            var table = $('#personTable').DataTable({
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/tr.json',
+                },
+                buttons: [
+                    'copyHtml5',
+                    'excelHtml5',
+                    'csvHtml5',
+                    'pdfHtml5'
+                ],
+                searching: true, // DataTables'ın varsayılan arama işlevini etkin bırakıyoruz.
+                pageLength: 10, // Varsayılan gösterilecek satır sayısı
+                lengthMenu: [10, 20, 30, 50, 100, 150], // Sayfa başına gösterilecek satır sayısı seçenekleri
+                paging: true, // Sayfalama etkin
+                scrollY: tableHeight + "px", // Dinamik olarak ayarlanmış tablo yüksekliği
+                scrollCollapse: true, // Satırlar azaldığında tablo yüksekliği de küçülsün
+                scrollX: true // Yatay kaydırma etkin
+            });
+
+            // Custom search functionality
+            $('#searchForm input').on('keyup', function () {
+                table.column(1).search($('#searchTcNo').val().toLowerCase(), false, false);
+                table.column(2).search($('#searchName').val().toLowerCase(), false, false);
+                table.column(3).search($('#searchSurname').val().toLowerCase(), false, false);
+                table.column(4).search($('#searchPosition').val().toLowerCase(), false, false);
+                table.column(6).search($('#searchPhone').val().toLowerCase(), false, false);
+                table.draw();
+            });
+
+            // Row click event
+            $('#personTable tbody').on('click', 'tr', function () {
+                var personId = $(this).data('person-id');
+                if (personId) {
+                    window.location.href = '/HumanResource/PersonelDetail/' + personId;
+                }
+            });
+        });</script>
+
+}

@@ -1,0 +1,97 @@
+*{
+	
+    margin: 0;
+    padding: 0;
+  }
+  
+  html{
+      
+    overflow: hidden;
+  }
+  
+  #info{
+      
+      position: fixed;
+      top: 80%;
+      width:  80%;
+      padding-left: 10%;
+      padding-right: 10%;
+      text-align: center;
+      z-index: 50;
+      display: grid;
+  }
+  
+  p{
+      
+      color: #822f2f;
+      text-align: center;
+      width: 10%;
+      height: 10%;
+  }
+  
+  #container{
+      
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      zIndex: -10;
+      background: radial-gradient(#FFFFFF,#FFFFFF);
+  }
+.dg.main{
+    display:none;
+}
+.dg.main .close-button {
+    opacity: 0.5;
+    border-radius: 0 0 10px 10px;
+}
+  
+  #title{
+      
+        position:absolute;
+        width:100%;
+        left: 20px;
+        top: 20px;
+        font-family:'Open Sans', sans-serif;
+        color:#2e1e1e;
+        line-height : 1.5;
+        font-size: 2em;
+        display: hidden;
+  }
+  
+  .subtitle{
+      
+        color:#ffffff;
+        text-transform: uppercase;
+        font-size: 0.4em;
+  }
+  
+  .full_width{
+      
+        width: 100% !important;
+  }
+  
+  .reset_button{
+      
+      width: 100% !important;
+      color: rgb(255, 0, 0) !important; 
+      font-size: 105% !important;
+      font-weight: bold;
+      text-align: center;
+  }
+  
+  .kontrol_buttons{
+      
+      width: 100% !important;
+      color: rgb(255, 0, 0) !important;
+      font-size: 105% !important;
+      font-weight: bold;
+      text-align: center;
+  }
+  
+  .teklif_button{
+      
+      width: 100% !important;
+      text-align: center !important;
+  }

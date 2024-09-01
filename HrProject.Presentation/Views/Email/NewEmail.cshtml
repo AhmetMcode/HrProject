@@ -1,0 +1,158 @@
+﻿@using static EmailController;
+@model NewEmailViewModel
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+<!-- Theme style -->
+<link rel="stylesheet" href="~/calendarScript/dist/css/adminlte.min.css">
+<!-- summernote -->
+<link rel="stylesheet" href="~/calendarScript/plugins/summernote/summernote-bs4.min.css">
+
+<div class="row">
+    <div class="col-md-3">
+        <a asp-controller="Email" asp-action="Index" class="btn btn-primary btn-block mb-3">Gelen Kutusu</a>
+
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Dosyalar</h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <ul class="nav nav-pills flex-column">
+                    <li class="nav-item active">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-inbox"></i> Inbox
+                            <span class="badge bg-primary float-right">12</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="far fa-envelope"></i> Sent
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="far fa-file-alt"></i> Drafts
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="fas fa-filter"></i> Junk
+                            <span class="badge bg-warning float-right">65</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="far fa-trash-alt"></i> Trash
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Labels</h3>
+
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body p-0">
+                <ul class="nav nav-pills flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="far fa-circle text-danger"></i> Important</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="far fa-circle text-warning"></i> Promotions</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="far fa-circle text-primary"></i> Social</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+    <!-- /.col -->
+    <div class="col-md-9">
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">Mail Gönder</h3>
+            </div>
+            <form asp-action="NewEmail" >
+
+            <!-- /.card-header -->
+            <div class="card-body">
+                <div class="form-group">
+                    <input class="form-control" asp-for="To" placeholder="To:">
+                </div>
+                <div class="form-group">
+                        <input class="form-control" asp-for="Subject" placeholder="Konu:">
+                </div>
+                <div class="form-group">
+                        <textarea id="compose-textarea" asp-for="Body" class="form-control" style="height: 300px">
+
+                    </textarea>
+                </div>
+                <div class="form-group">
+                    <div class="btn btn-default btn-file">
+                        <i class="fas fa-paperclip"></i> Dosya Yükle
+                        <input type="file" name="attachment">
+                    </div>
+                    <p class="help-block">Max. 32MB</p>
+                </div>
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer">
+                <div class="float-right">
+                    <button type="button" class="btn btn-default"><i class="fas fa-pencil-alt"></i> Taslak</button>
+                    <button type="submit" class="btn btn-primary"><i class="far fa-envelope"></i> Gönder</button>
+                </div>
+                <button type="reset" class="btn btn-default"><i class="fas fa-times"></i> Temizle</button>
+            </div>
+            </form>
+
+            <!-- /.card-footer -->
+        </div>
+        <!-- /.card -->
+    </div>
+    <!-- /.col -->
+</div>
+
+<script src="~/calendarScript/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="~/calendarScript/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- jQuery UI -->
+<script src="~/calendarScript/plugins/jquery-ui/jquery-ui.min.js"></script>
+<!-- AdminLTE App -->
+<script src="~/calendarScript/dist/js/adminlte.min.js"></script>
+<!-- fullCalendar 2.2.5 -->
+<script src="~/calendarScript/plugins/moment/moment.min.js"></script>
+<script src="~/calendarScript/plugins/fullcalendar/main.js"></script>
+
+<script src="~/calendarScript/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="~/calendarScript/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="~/calendarScript/dist/js/adminlte.min.js"></script>
+<!-- Summernote -->
+<script src="~/calendarScript/plugins/summernote/summernote-bs4.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script>
+    $(function () {
+        //Add text editor
+        $('#compose-textarea').summernote()
+    })
+</script>

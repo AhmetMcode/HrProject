@@ -1,0 +1,197 @@
+﻿@using HrProject.Domain.Entities;
+@using HrProject.Presentation.ViewModels;
+@model PersonelDocumentViewModel
+@{
+    var documentList = ViewBag.DocumentList as List<PersonelDocument>;
+    var authList = ViewBag.AllAuthories as List<PersonelAuthority>;
+    var FilteredauthList = ViewBag.FilteredAuthories as List<PersonelAuthority>;
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+
+<style>
+    #overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.7);
+        z-index: 9999;
+        display: none;
+    }
+
+    #loading-message {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    }
+    .form-group label {
+        font-size: 25px;
+        display: flex;
+        align-items: center;
+    }
+
+    .fas {
+        font-size: 30px;
+        color: #92968f; /* İkon rengini yeşil olarak ayarla */
+        margin-right: 20px;
+    }
+
+    .btn i {
+        color: inherit; /* Orijinal renk değerini koru */
+    }
+
+    input.form-control:focus {
+        border-color: #80bdff; /* Odaklandığında çerçeve rengi */
+        box-shadow: 0 0 10px rgba(128, 189, 255, 0.8); /* Gölge efekti */
+    }
+
+    .custom-table tr:hover {
+        background-color: #0D6EFD;
+    }
+    /* DataTables Buttons sağ üst köşe */
+    .dataTables_wrapper .dt-buttons {
+        position: absolute;
+        top: -16%;
+        right: 0;
+    }
+
+</style>
+
+@{
+    int i = 1;
+}
+
+<div id="overlay">
+    <div id="loading-message">
+        <div class="spinner-border" style="width: 50px; height: 50px;" role="status">
+            <span class="visually-hidden">Yükleniyor...</span>
+        </div>
+    </div>
+</div>
+
+<h3>Personel Belge Listesi</h3>
+<div class="card">
+    <div class="card-body">
+
+        <a class="btn btn-success my-3" asp-action="GetDocList" asp-controller="PersonelDocument">Yetki Belgeleri <i class="fas fa-list"></i></a>
+        <a class="btn btn-info my-3" asp-action="GetRequiredDocPerList" asp-controller="PersonelDocument">Yetkili Personel Listesi <i class="fas fa-list"></i></a>
+
+        <form id="myForm" method="get" action="@Url.Action("GetPerDocList")">
+            <div class="row">
+
+                <div class="form-group col-md-2 my-2">
+                    <label class="my-1" for="documentCode"> Personel Listesi:</label>
+                    <select id="personId" multiple name="personId" class="form-control selectpicker" data-live-search="true">
+                        <option value="" selected>Seçiniz</option>
+                        @foreach (var auth in ViewBag.Personals)
+                        {
+                            <option value="@auth.Id">@auth.Name-@auth.Surname</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-2 my-2">
+                    <label class="my-1" for="documentCode"> Yetkiler:</label>
+                    <select multiple name="authorityIds" class="form-control selectpicker" data-live-search="true">
+                        <option value="" selected>Seçiniz</option>
+                        @foreach (var authors in authList)
+                        {
+                            <option value="@authors.Id">@authors.Name</option>
+                        }
+                    </select>
+                </div>             
+                <div class="form-group col-md-2 my-5">
+                    <button type="submit" class="btn btn-success"> <i class="fas fa-search" style="font-size: 24px;"></i> </button>
+                </div>
+
+            </div>
+
+        </form>
+
+
+
+        <table id="example" class="table table-hover custom-table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    @{
+                        var sortedDocuments = Model.PersonelDocuments.OrderBy(doc => doc.PersonelAuthority.Name).Where(x => FilteredauthList.Select(x => x.Id).ToList().Contains(x.PersonelAuthorityId.Value)).ToList();
+                    }
+
+                    @foreach (var persAddDoc in sortedDocuments)
+                    {
+                        <th style="@(persAddDoc.IsRequired ? "background-color: yellow;" : "")">
+                            <span>@persAddDoc.DocumentCode</span>
+                        </th>
+                    }
+
+
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var per in Model.Personals)
+                {
+                    <tr>
+                        <td> @per.Name-@per.Surname</td>
+
+                        @foreach (var persAddDoc in Model.PersonelDocuments.OrderBy(doc => doc.PersonelAuthorityId).Where(x => FilteredauthList.Select(x => x.Id).ToList().Contains(x.PersonelAuthorityId.Value)).ToList())
+                        {
+                            <td>
+                                @if (Model.PersonelInterDocs.Any(p => p.PersonId == per.Id && p.PersAddDocs.Any(pad => pad.PersonelDocumentId == persAddDoc.Id)))
+                                {
+                                    var matchingInterDoc = Model.PersonelInterDocs
+                                    .First(p => p.PersonId == per.Id && p.PersAddDocs.Any(pad => pad.PersonelDocumentId == persAddDoc.Id));
+
+                                    var matchingPersAddDoc = matchingInterDoc.PersAddDocs
+                                    .First(pad => pad.PersonelDocumentId == persAddDoc.Id);
+
+                                    if (!string.IsNullOrEmpty(matchingPersAddDoc.SigningDocument))
+                                    {
+                                        <a href="~/perdocument/@matchingPersAddDoc.SigningDocument" target="_blank">
+                                            <i class="fas fa-download" style="font-size: 20px; color:aqua;"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span><i class="fas fa-minus" style="color:red"></i></span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span><i class="fas fa-minus" style="color:red"></i></span>
+                                }
+                            </td>
+                        }
+
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+
+
+        <!-- End Table with stripped rows -->
+
+    </div>
+</div>
+
+<script>
+    $(window).on('load', function () {
+        $('#overlay').fadeOut('slow');
+    });
+
+    $(document).on('submit', 'form', function () {
+        $('#overlay').fadeIn('slow');
+    });
+
+</script>

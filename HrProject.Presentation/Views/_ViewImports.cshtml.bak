@@ -1,0 +1,3 @@
+﻿@using HrProject.Presentation
+@using HrProject.Presentation.Models
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers

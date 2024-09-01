@@ -1,0 +1,75 @@
+﻿@{
+    ViewData["Title"] = "Access Denied";
+    Layout = "";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Denied</title>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+            .container h1 {
+                font-size: 3rem;
+                margin: 0;
+                color: #d9534f;
+            }
+
+            .container p {
+                font-size: 1.25rem;
+                margin: 15px 0;
+            }
+
+            .container a {
+                display: inline-block;
+                margin-top: 20px;
+                padding: 10px 20px;
+                font-size: 1rem;
+                color: white;
+                background-color: #0275d8;
+                text-decoration: none;
+                border-radius: 5px;
+            }
+
+                .container a:hover {
+                    background-color: #025aa5;
+                }
+
+            .container img {
+                width: 100px;
+                height: 100px;
+                margin-top: 20px;
+            }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>403</h1>
+        <p>Bu Sayafaya Erişim Yetkiniz yok.</p>
+        <p>Lütfen Yöneticiniz ile ilteişime GEçin.</p>
+        <a href="/">Anasyafya Dön</a>
+        <br>
+        <img src="/images/access-denied.png" alt="Access Denied" />
+    </div>
+</body>
+</html>

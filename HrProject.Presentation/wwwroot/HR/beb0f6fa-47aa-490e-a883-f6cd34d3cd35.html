@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    #header, #footer {
+      position: fixed;
+      width: 100%;
+      background-color: lightgray;
+      padding: 10px;
+      text-align: center;
+    }
+
+    #header {
+      top: 0;
+    }
+    @page {
+  bottom {
+    content: "Chapter #" counter(chapter);
+  }
+}
+    #footer {
+      bottom: 0;
+    }
+
+    #content {
+      margin-top: 60px; /* Adjust based on your header height */
+      margin-bottom: 40px; /* Adjust based on your footer height */
+    }
+
+    ol {
+      margin-top: 10px;
+    }
+
+    #downloadButton {
+      position: fixed;
+      right: 10px;
+      bottom: 10px;
+      padding: 10px;
+      background-color: #007BFF;
+      color: #fff;
+      cursor: pointer;
+      border: none;
+    }
+    #footer:after {
+    counter-increment: page;
+    content: counter(page); 
+}
+  </style>
+</head>
+<body>
+
+<div id="header">
+  <table class="enUst">
+    <tbody>
+      <tr>
+        <th rowspan="3"><img width="180px;" src="logo.png"></th>
+        <th colspan="4" style="text-align:center">
+          <h5>Prefabrik Yapı Teklifi</h5>
+        </th>
+      </tr>
+      <tr>
+        <td>Döküman No</td>
+        <td>1</td>
+        <td>Revizyon No</td>
+        <td>Rv_001(12)</td>
+      </tr>
+      <tr>
+        <td>Revizyon Tarihi</td>
+        <td>29.09.2023</td>
+        <td>Sayfa No</td>
+        <td class="sno"></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div id="footer"><p style="color: red">This is a footer. Page <span id="current-page-placeholder"></span>/<span id="total-pages-placeholder"></span></p></div>
+
+<div id="content">
+
+  <h2>An ordered HTML list</h2>
+  <h2>An ordered HTML list</h2>
+  <h2>An ordered HTML list</h2>
+  <h2>An ordered HTML list</h2>
+  <h2>An ordered HTML list</h2>
+  <h2>An ordered HTML list</h2>
+  <h2>An ordered HTML list</h2>
+  <h2>An ordered HTML list</h2>
+  <h2>An ordered HTML list</h2>
+  <h2>An ordered HTML list</h2>
+  <h2>An ordered HTML list</h2>
+  <h2>An ordered HTML list</h2>
+  <h2>An ordered HTML list</h2>
+  <h2>An ordered HTML list</h2>
+  <h2>An ordered HTML list</h2>
+  <h2>An ordered HTML list</h2>
+
+  <h2>An ordered HTML list</h2>
+  <h2>An ordered HTML list</h2>
+  <h2>An ordered HTML list</h2>
+  <h2>An ordered HTML list</h2>
+  <h2>An ordered HTML list</h2>
+  <h2>An ordered HTML list</h2>
+  <h2>An ordered HTML list</h2>
+  <h2>An ordered HTML list</h2>
+
+  <h2>An ordered HTML list</h2>
+  <h2>An ordered HTML list</h2>
+  <h2>An ordered HTML list</h2>
+  <!-- Your content goes here -->
+
+</div>
+
+<button id="downloadButton" onclick="downloadPDF()">Download PDF</button>
+
+<script>
+  // Set page numbers
+  function setPageNumbers() {
+    var currentPage = 1;
+    var contentElement = document.getElementById('content');
+    var contentHeight = contentElement.offsetHeight;
+    var totalPage = Math.ceil((contentHeight + 80) / (window.innerHeight + 220));
+
+    document.getElementById('total-pages-placeholder').innerText = totalPage;
+
+    var snoElement = document.querySelector('.sno');
+
+    var mediaQueryList = window.matchMedia('print');
+    mediaQueryList.addListener(function (mql) {
+      if (!mql.matches) {
+        snoElement.innerText = currentPage;
+
+        if (currentPage < totalPage) {
+          document.getElementById('current-page-placeholder').innerText = currentPage;
+          currentPage++;
+          window.print();
+        }
+      }
+    });
+
+    // Initial print call to start the process
+    window.print();
+  }
+
+
+  // Download PDF function
+  function downloadPDF() {
+    setPageNumbers();
+    window.print();
+  }
+  var pdfInfo = {};
+  var x = document.location.search.substring(1).split('&');
+  for (var i in x) { var z = x[i].split('=',2); pdfInfo[z[0]] = unescape(z[1]); }
+  function getPdfInfo() {
+    var page = pdfInfo.page || 1;
+    var pageCount = pdfInfo.topage || 1;
+    document.getElementById('pdfkit_page_current').textContent = page;
+    document.getElementById('pdfkit_page_count').textContent = pageCount;
+  }
+  // Call the function when the page is loaded
+  window.onload = setPageNumbers;
+</script>
+
+</body>
+</html>

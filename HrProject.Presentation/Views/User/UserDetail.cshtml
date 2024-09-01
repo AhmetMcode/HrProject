@@ -1,0 +1,478 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using HrProject.Domain.Entities
+@{
+    ViewData["Title"] = "Üretim Adımı Oluştur - @projectElement.Name";
+    var myroles = ViewBag.MyRoles as IList<string>;
+    var allRoles = ViewBag.AllRoles as List<IdentityRole>;
+    var myCalismaYerleriHr = ViewBag.MyCalismaYerleri as List<Workplace>;
+    var CalismaYerleriHr = ViewBag.TumCalismaYerleri as List<Workplace>;
+    var TumUretimYerleri = ViewBag.TumUretimYerleri as List<ProductionPlace>;
+    var myUretimYerleri = ViewBag.MyUretimYerleri as List<ProductionPlace>;
+    var user = ViewBag.User as ApplicationUser;
+}
+<div class="card">
+    <div class="card-body">
+        <h1 class="card-title">@user.Name</h1>
+        <h5 class="card-subtitle mb-2 text-muted">@user.SurName</h5>
+        <h6 class="card-subtitle mb-2 text-muted">Personel Numarası: @user.PersonelNumber</h6>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow border-success">
+            <div class="card-header bg-success text-white">
+                <h3>Tüm Roller</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <ul id="allRoles" class="list-group droppable">
+                    @foreach (var step in allRoles.Where(x => !myroles.Contains(x.Name)))
+                    {
+                        <li class="list-group-item" data-id="@step.Id">
+                            <div class="row">
+                                <div class="col-10">
+                                    <span>@step.Name</span>
+                                </div>
+                                <div class="col-2 text-right">
+                                    <button type="button" class="btn btn-sm btn-outline-primary">Ekle</button>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow border-danger">
+            <div class="card-header bg-danger text-white">
+                <h3>Kullanıcının Rolleri</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <ul id="myRoles" class="list-group droppable">
+                    @foreach (var step in allRoles.Where(x => myroles.Contains(x.Name)))
+                    {
+                        <li class="list-group-item" data-id="@step.Id">
+                            <div class="row">
+                                <div class="col-10">
+                                    <span>@step.Name</span>
+                                </div>
+                                <div class="col-2 text-right">
+                                    <button type="button" class="btn btn-sm btn-outline-danger">Kaldır</button>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow border-success">
+            <div class="card-header bg-success text-white">
+                <h3>Tüm Üretim Yerleri</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <ul id="allUretim" class="list-group droppable">
+                    @if (myUretimYerleri != null)
+                    {
+                        @foreach (var step in TumUretimYerleri.Where(x => !myUretimYerleri.Select(x => x.Id).Contains(x.Id)))
+                        {
+                            <li class="list-group-item" data-id="@step.Id">
+                                <div class="row">
+                                    <div class="col-3">
+                                        <span>@step.Name</span>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        @foreach (var step in TumUretimYerleri.ToList())
+                        {
+                            <li class="list-group-item" data-id="@step.Id">
+                                <div class="row">
+                                    <div class="col-3">
+                                        <span>@step.Name</span>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    }
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card shadow border-danger">
+            <div class="card-header bg-danger text-white">
+                <h3>Benim Üretim Yerlerim</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <ul id="myUretimYerleri" class="list-group droppable">
+                    @if (myUretimYerleri != null && myUretimYerleri.Count != 0)
+                    {
+                        @foreach (var step in myUretimYerleri)
+                        {
+                            <li class="list-group-item" data-id="@step.Id">
+                                <div class="row">
+                                    <div class="col-3">
+                                        <span>@step.Name</span>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-3">
+                                    <span>Üretim Ve Kalite Modülünde Kullanılacak Yer Yok</span>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h3>Tüm  Puantaj Sahaları</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <ul id="allCalismaYerleri" class="list-group droppable">
+                    @if (myCalismaYerleriHr != null)
+                    {
+                        @foreach (var step in CalismaYerleriHr.Where(x => !myCalismaYerleriHr.Select(x => x.Id).Contains(x.Id)))
+                        {
+                            <li class="list-group-item" data-id="@step.Id">
+                                <div class="row">
+                                    <div class="col-3">
+                                        <span>@step.Name</span>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        @foreach (var step in CalismaYerleriHr.ToList())
+                        {
+                            <li class="list-group-item" data-id="@step.Id">
+                                <div class="row">
+                                    <div class="col-3">
+                                        <span>@step.Name</span>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    }
+
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card card-danger">
+            <div class="card-header bg-danger text-white">
+                <h3>Kullanıcının Görebilceği Puantaj Sahaları</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <ul id="myCalismaYerleri" class="list-group droppable">
+                    @if (myCalismaYerleriHr != null && myCalismaYerleriHr.Count != 0)
+                    {
+                        @foreach (var step in myCalismaYerleriHr)
+                        {
+                            <li class="list-group-item" data-id="@step.Id">
+                                <div class="row">
+                                    <div class="col-3">
+                                        <span>@step.Name</span>
+                                    </div>
+                                </div>
+                            </li>
+                        }
+                    }
+                    else
+                    {
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-3">
+                                    <span>İnsan Kaynakları Modülünde Kullanılacak Yer Yok</span>
+                                </div>
+                            </div>
+                        </li>
+                    }
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+<script src="~/calendarScript/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="~/calendarScript/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- jQuery UI -->
+<script src="~/calendarScript/plugins/jquery-ui/jquery-ui.min.js"></script>
+<!-- AdminLTE App -->
+<script src="~/calendarScript/dist/js/adminlte.min.js"></script>
+<!-- fullCalendar 2.2.5 -->
+<script src="~/calendarScript/plugins/moment/moment.min.js"></script>
+<script>
+
+    $(function () {
+        // Make list items draggable
+        $("#allRoles li, #myRoles li").draggable({
+            appendTo: "body",
+            helper: "clone"
+        });
+
+        // Make lists droppable
+        $("#myRoles, #allRoles").droppable({
+            accept: ".list-group-item",
+            drop: function (event, ui) {
+                var $item = $(ui.draggable);
+                var $list = $(this);
+
+                if ($list.attr('id') === 'allRoles') {
+                    // If dropping in 'All Roles', clone the item
+                    if ($list.find("[data-id='" + $item.data("id") + "']").length === 0) {
+                        $item.clone().appendTo($list);
+                        var userId = "@user.Id";
+                        var roleId = $item.data("id");
+                        removeRole(userId, roleId);
+                    }
+                } else if ($list.attr('id') === 'myRoles') {
+                    // If dropping in 'User's Roles', remove the item from 'All Roles' and append to 'User's Roles'
+                    $item.clone().appendTo($list);
+                    var userId = "@user.Id";
+                    var roleId = $item.data("id");
+                    addRole(userId, roleId);
+                }
+                $item.remove();
+
+            }
+        });
+
+    });
+
+    function addRole(userId, roleId) {
+        $.ajax({
+            url: '/User/AddRole?userId=' + userId + '&roleId=' + roleId,
+            type: 'POST',
+            success: function (response) {
+                alert(response);
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                alert('Rol eklenirken bir hata oluştu.');
+            }
+        });
+    }
+
+    function removeRole(userId, roleId) {
+        $.ajax({
+            url: '/User/RemoveRole?userId=' + userId + '&roleId=' + roleId,
+            type: 'POST',
+            success: function (response) {
+                alert(response);
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                alert('Rol kaldırılırken bir hata oluştu.');
+            }
+        });
+    }
+
+</script>
+<script>
+    $(document).ready(function () {
+        $("#allCalismaYerleri li, #myCalismaYerleri li").draggable({
+            appendTo: "body",
+            helper: "clone"
+        });
+
+        // Make lists droppable
+        $("#myCalismaYerleri, #allCalismaYerleri").droppable({
+            accept: ".list-group-item",
+            drop: function (event, ui) {
+                var $item = $(ui.draggable);
+                var $list = $(this);
+
+                if ($list.attr('id') === 'allCalismaYerleri') {
+                    // If dropping in 'All Roles', clone the item
+                    if ($list.find("[data-id='" + $item.data("id") + "']").length === 0) {
+                        $item.clone().appendTo($list);
+                        var userId = "@user.Id";
+                        var roleId = $item.data("id");
+                        removeWorkPlace(userId, roleId);
+                    }
+                } else if ($list.attr('id') === 'myCalismaYerleri') {
+                    // If dropping in 'User's Roles', remove the item from 'All Roles' and append to 'User's Roles'
+                    $item.clone().appendTo($list);
+                    var userId = "@user.Id";
+                    var roleId = $item.data("id");
+                    addWorkPlace(userId, roleId);
+                }
+                $item.remove();
+            }
+        });
+
+        // Add Work Place
+        function addWorkPlace(userId, workPlaceId) {
+            $.ajax({
+                type: "POST",
+                url: "/User/AddWorkPlace",
+                data: { userId: userId, workPlaceId: workPlaceId },
+                success: function (response) {
+                    alert(response);
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            });
+        }
+
+        // Remove Work Place
+        function removeWorkPlace(userId, workPlaceId) {
+            $.ajax({
+                type: "POST",
+                url: "/User/RemoveWorkPlace",
+                data: { userId: userId, workPlaceId: workPlaceId },
+                success: function (response) {
+                    alert(response);
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            });
+        }
+    });
+
+</script>
+<script>
+    $(document).ready(function () {
+        $("#allUretim li, #myUretimYerleri li").draggable({
+            appendTo: "body",
+            helper: "clone"
+        });
+
+        // Make lists droppable
+        $("#myUretimYerleri, #allUretim").droppable({
+            accept: ".list-group-item",
+            drop: function (event, ui) {
+                var $item = $(ui.draggable);
+                var $list = $(this);
+
+                if ($list.attr('id') === 'allUretim') {
+                    // If dropping in 'All Roles', clone the item
+                    if ($list.find("[data-id='" + $item.data("id") + "']").length === 0) {
+                        $item.clone().appendTo($list);
+                        var userId = "@user.Id";
+                        var roleId = $item.data("id");
+                        removeWorkPlace(userId, roleId);
+                    }
+                } else if ($list.attr('id') === 'myUretimYerleri') {
+                    // If dropping in 'User's Roles', remove the item from 'All Roles' and append to 'User's Roles'
+                    $item.clone().appendTo($list);
+                    var userId = "@user.Id";
+                    var roleId = $item.data("id");
+                    addWorkPlace(userId, roleId);
+                }
+                $item.remove();
+            }
+        });
+
+        // Add Work Place
+        function addWorkPlace(userId, workPlaceId) {
+            $.ajax({
+                type: "POST",
+                url: "/User/AddProductionPlace",
+                data: { userId: userId, workPlaceId: workPlaceId },
+                success: function (response) {
+                    alert(response);
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            });
+        }
+
+        // Remove Work Place
+        function removeWorkPlace(userId, workPlaceId) {
+            $.ajax({
+                type: "POST",
+                url: "/User/RemoveProductionPlace",
+                data: { userId: userId, workPlaceId: workPlaceId },
+                success: function (response) {
+                    alert(response);
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            });
+        }
+    });
+
+</script>

@@ -1,0 +1,56 @@
+﻿@using HrProject.Domain.Entities;
+@using HrProject.Presentation.ViewModels;
+@model PersonelDocumentViewModel
+
+@{
+    var personelAuthorityList = ViewBag.PersonelAuthority as List<PersonelAuthority>;
+}
+
+<h3>Belge Ekle</h3>
+
+<div class="card">
+   
+    <div class="card-body">
+
+        <a class="btn btn-success my-3" asp-action="GetAuthority" asp-controller="PersonelDocument">Yetki Ekle <i class="fas fa-plus"></i></a>
+        <a class="btn btn-info my-3" asp-action="GetPersonel" asp-controller="PersonelDocument">Personele Belge Ekle <i class="fas fa-plus"></i></a>
+
+        <form asp-action="AddPerDocument" asp-controller="PersonelDocument" method="post" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label asp-for="DocumentCode" class="control-label">Belge Döküman Kodu</label>
+                <input asp-for="DocumentCode" class="form-control my-3" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Template" class="control-label">Şablon</label>
+                <input asp-for="Template" type="file" class="form-control my-3" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PersonelAuthorityId" class="control-label">Personel Yetkisi</label>
+                <select asp-for="PersonelAuthorityId" class="form-control my-3">
+                    <option value="">Seçiniz</option>
+                    @foreach (var authority in personelAuthorityList)
+                    {
+                        <option value="@authority.Id">@authority.Name</option>
+                    }
+                </select>
+                <span asp-validation-for="PersonelAuthorityId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <div class="form-check">
+                    <input asp-for="IsRequired" class="form-check-input" />
+                    <label class="form-check-label" asp-for="IsRequired">Zorunlu Mu?</label>
+                </div>
+            </div>
+
+            <div class="form-group my-3">
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-save"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
